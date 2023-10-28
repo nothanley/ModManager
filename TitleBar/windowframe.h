@@ -29,6 +29,9 @@ private:
     QWidget *mainBody;
     /// Позиция окна на экране.
     QPoint position;
+    bool m_ResizeWindow = false;
+    bool m_isHoveringCorner = false;
+    QPoint m_DragStartPos;
     /// Размер границ окна.
     int borderSize;
 
@@ -44,6 +47,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
     /// Обработчик нативного события окна.
     bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+    void enterEvent(QEvent* event) override;
 public:
     /// Показать или скрыть кнопку минимизации окна.
     void enableMinimum(bool enable);

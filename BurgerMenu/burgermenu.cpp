@@ -71,7 +71,7 @@ BurgerMenu::BurgerMenu(QWidget* parent)
     : QWidget(parent)
     , mActions(new QActionGroup(this))
     , mBurgerButton(new QPushButton(this))
-    , mMenuWidth(200)
+    , mMenuWidth(90)
     , mAnimated(true)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);

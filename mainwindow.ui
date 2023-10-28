@@ -92,17 +92,7 @@ border: 0px;</string>
           <property name="verticalSpacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QFontComboBox" name="fontComboBox"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QProgressBar" name="progressBar">
-            <property name="value">
-             <number>24</number>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
+          <item row="2" column="0">
            <widget class="QTextEdit" name="CollectionDummy">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(149, 149, 149);
@@ -116,10 +106,17 @@ background-color: rgb(54, 57, 70);</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QGroupBox" name="groupBox">
-            <property name="title">
-             <string>GroupBox</string>
+          <item row="1" column="0">
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFontComboBox" name="fontComboBox">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 0, 0);</string>
             </property>
            </widget>
           </item>
@@ -130,23 +127,6 @@ background-color: rgb(54, 57, 70);</string>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusbar">
-   <property name="maximumSize">
-    <size>
-     <width>16777215</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
-   </property>
-   <property name="sizeGripEnabled">
-    <bool>true</bool>
-   </property>
   </widget>
  </widget>
  <resources/>

@@ -62,13 +62,29 @@ void WindowFrame::on_minimum_clicked(){
 /// @brief Обработчик события нажатия кнопки мыши.
 /// @param event Указатель на объект QMouseEvent с информацией о событии.
 void WindowFrame::mousePressEvent(QMouseEvent *event) {
+
+
+    /* Handle user resize input */
+    if (event->pos().x() > width() - 10 || event->pos().y() > height() - 10) {
+            m_ResizeWindow = true;
+            m_DragStartPos = event->globalPos();
+            setCursor(Qt::SizeFDiagCursor); // Set the cursor to the resize icon
+    }
+
+    /* Handle user drag input */
     if (event->buttons() == Qt::LeftButton) {
         QWidget* widget = childAt(event->x(), event->y());
         if(widget==ui->header) {
             position.setX(event->x());
-            position.setY(event->y());
-        }
+            position.setY(event->y()); }
     }
+
+}
+
+void WindowFrame::enterEvent(QEvent* event)
+{
+    if (m_isHoveringCorner) {
+        setCursor(Qt::SizeFDiagCursor); }
 }
 
 
@@ -76,10 +92,29 @@ void WindowFrame::mousePressEvent(QMouseEvent *event) {
 /// @param event Указатель на объект события перемещения мыши (QMouseEvent).
 /// @return Нет возвращаемого значения.
 void WindowFrame::mouseMoveEvent(QMouseEvent *event) {
+
+
+    if (event->pos().x() > width() - 10 &&
+        event->pos().y() > height() - 10) { m_isHoveringCorner = true;}
+    else { m_isHoveringCorner = false; }
+
+    if (m_ResizeWindow) {
+            QPoint globalPos = event->globalPos();
+            QPoint delta = globalPos - m_DragStartPos;
+
+            int newWidth = width() + delta.x() * 0.2;
+            int newHeight = height() + delta.y() * 0.2;
+            int minWidth = 100;
+            int minHeight = 100;
+
+            if (newWidth > minWidth && newHeight > minHeight) {
+                resize(newWidth, newHeight);
+                m_DragStartPos = globalPos; }
+    }
+
     if (event->buttons() == Qt::LeftButton) {
-        if (position.x() != 0 || position.y() != 0) {
+        if (position.x() != 0 || position.y() != 0)
             move(event->globalX() - position.x(), event->globalY() - position.y());
-        }
     }
 }
 
@@ -87,6 +122,8 @@ void WindowFrame::mouseMoveEvent(QMouseEvent *event) {
 /// @brief Обработчик события отпускания кнопки мыши в окне.
 /// @param event Указатель на объект события отпускания кнопки мыши (QMouseEvent).
 void WindowFrame::mouseReleaseEvent(QMouseEvent *event) {
+    m_ResizeWindow = false;
+    setCursor(Qt::ArrowCursor); // Set the cursor back to the default arrow
     position.setX(0);
     position.setY(0);
 }
@@ -208,8 +245,9 @@ bool WindowFrame::eventFilter(QObject *obj, QEvent *event) {
 void WindowFrame::AddBurgerMenu(){
     BurgerMenu* menu     = new BurgerMenu();
     this->layout()->replaceWidget(ui->SideBarDummy,menu);
+    this->ui->SideBarDummy->hide();
 
-//    menu->setMenuWidth(100);
+    menu->setMaximumWidth(120);
     menu->setBurgerIcon(QIcon(":/icons/BurgerMenu/icons/burger.png"));
     menu->addMenuAction(QIcon(":/icons/BurgerMenu/icons/collections.png"), "Collection");
     menu->addMenuAction(QIcon(":/icons/BurgerMenu/icons/folders.png"),     "Folders");
