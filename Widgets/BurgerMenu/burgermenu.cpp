@@ -81,6 +81,7 @@ BurgerMenu::BurgerMenu(QWidget* parent)
     mBurgerButton->setFixedSize(48,48);
     mBurgerButton->setCheckable(true);
     mBurgerButton->setCursor(Qt::PointingHandCursor);
+    this->setMouseTracking(true);
     mActions->setExclusive(true);
 
     auto burgerWidget = new QWidget(this);

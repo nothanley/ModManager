@@ -2,21 +2,31 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPushButton>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
+    QPushButton* maximizeButton = nullptr;
+    QPushButton* minimizeButton = nullptr;
+    QPushButton* closeButton = nullptr;
+    QWidget* toolBar = nullptr;
 
+private:
     Ui::MainWindow *ui;
+
+    void InitLayoutWidgets();
+    void InitGUIButtons();
+    void AddBurgerMenu();
 };
+
 #endif // MAINWINDOW_H

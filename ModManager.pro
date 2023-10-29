@@ -2,36 +2,27 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++17
+TARGET = ModManager
+TEMPLATE = app
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-SOURCES += \
-    BurgerMenu/burgermenu.cpp \
-    TitleBar/windowframe.cpp \
-    main.cpp \
+SOURCES += main.cpp\
+    Widgets/BurgerMenu/burgermenu.cpp \
+    WindowHandler/qwinwidget.cpp \
+    WindowHandler/winnativewindow.cpp \
     mainwindow.cpp
 
-HEADERS += \
-    BurgerMenu/burgermenu.h \
-    TitleBar/windowframe.h \
+HEADERS  += \
+    Widgets/BurgerMenu/burgermenu.h \
+    WindowHandler/qwinwidget.h \
+    WindowHandler/winnativewindow.h \
     mainwindow.h
 
+LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
+        -ldwmapi \
+        -lgdi32
+
 FORMS += \
-    TitleBar/windowframe.ui \
     mainwindow.ui
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
-SUBDIRS += \
-    BurgerMenu/designerplugin.pro
 
 RESOURCES += \
     burgermenu.qrc
-
-DISTFILES +=

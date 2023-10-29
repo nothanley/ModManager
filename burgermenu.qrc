@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>BurgerMenu/icons/albums.png</file>
-        <file>BurgerMenu/icons/burger.png</file>
-        <file>BurgerMenu/icons/collections.png</file>
-        <file>BurgerMenu/icons/folders.png</file>
-        <file>TitleBar/icons/close.png</file>
-        <file>TitleBar/icons/maximize.png</file>
-        <file>TitleBar/icons/minimize.png</file>
-        <file>TitleBar/icons/restore.png</file>
+        <file>WindowHandler/icons/minimize.png</file>
+        <file>Widgets/BurgerMenu/icons/albums.png</file>
+        <file>Widgets/BurgerMenu/icons/burger.png</file>
+        <file>Widgets/BurgerMenu/icons/collections.png</file>
+        <file>Widgets/BurgerMenu/icons/folders.png</file>
+        <file>WindowHandler/icons/plus.png</file>
+        <file>WindowHandler/icons/plus_checked.png</file>
+        <file>WindowHandler/icons/x.png</file>
     </qresource>
 </RCC>

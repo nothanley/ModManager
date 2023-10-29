@@ -1,18 +1,21 @@
-#include "mainwindow.h"
-
-#include "TitleBar/windowframe.h"
-#include <QLayout>
-#include <QWidget>
 #include <QApplication>
+#include "WindowHandler/qwinwidget.h"
 
 int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
+{    
+    //This has the app draw at HiDPI scaling on HiDPI displays, usually two pixels for every one logical pixel
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication app(argc, argv);
 
-    MainWindow WindowContent;
-    WindowFrame* titleBar = new WindowFrame(nullptr,WindowContent.centralWidget());
-    titleBar->show();
+    int windowXPos = 450;
+    int windowYPos = 125;
+    int windowWidth = 1024;
+    int windowHeight = 768;
 
+    QWinWidget w;
+    w.setGeometry(windowXPos, windowYPos, windowWidth, windowHeight);
+    w.show();
 
-    return a.exec();
+    return app.exec();
 }
