@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Widgets/BurgerMenu/burgermenu.h"
+#include "gamemanagerform.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,8 +18,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::InitGUIButtons(){
     this->minimizeButton = ui->Minimize;
     this->maximizeButton = ui->Maximize;
@@ -30,19 +29,28 @@ void MainWindow::InitGUIButtons(){
 void MainWindow::InitLayoutWidgets(){
     InitGUIButtons();
     AddBurgerMenu();
+
+    // debug. remove later.
+    CreateGameManager();
 }
 
 void MainWindow::AddBurgerMenu(){
     BurgerMenu* menu     = new BurgerMenu();
     menu->setMaximumWidth(120);
     menu->setBurgerIcon(QIcon(":/icons/Widgets/BurgerMenu/icons/burger.png"));
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/collections.png"), "Collection");
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/folders.png"),     "Folders");
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/albums.png"),      "Albums");
+    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/collections.png"), "Action 1");
+    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/folders.png"),     "Action 2");
+    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/albums.png"),      "Action 3");
     this->centralWidget()->layout()->replaceWidget(ui->SideBarDummy,menu);
     delete ui->SideBarDummy;
 }
 
+
+void MainWindow::CreateGameManager(){
+    GameManagerForm* menu     = new GameManagerForm();
+    this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
+    ui->BodyDummy->hide();
+}
 
 
 

@@ -5,6 +5,7 @@
 
 HWND WinNativeWindow::childWindow = nullptr;
 QWidget* WinNativeWindow::childWidget = nullptr;
+static const int borderRadius = 4;
 
 HRGN CreateRoundRectRgn(int x, int y, int width, int height, int radius)
 {
@@ -191,14 +192,14 @@ LRESULT CALLBACK WinNativeWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam
                     int width =  winrect.right / childWidget->window()->devicePixelRatio() - 16;
                     int height =  winrect.bottom / childWidget->window()->devicePixelRatio() - 16;
                     childWidget->setGeometry(8, 8 , width , height );
-                    SetRoundWindowBorders(hWnd, width, height , 4);
+                    SetRoundWindowBorders(hWnd, width, height , borderRadius);
                 }
                 else
                 {
                     int width =  winrect.right / childWidget->window()->devicePixelRatio();
                     int height =  winrect.bottom / childWidget->window()->devicePixelRatio();
                     childWidget->setGeometry(0, 0,width, height);
-                    SetRoundWindowBorders(hWnd, width, height , 4);
+                    SetRoundWindowBorders(hWnd, width, height , borderRadius);
                 }
             }
 

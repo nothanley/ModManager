@@ -27,6 +27,8 @@ private:
     void InitLayoutWidgets();
     void InitGUIButtons();
     void AddBurgerMenu();
+    void CreateGameManager();
+//    void AddBurgerMenu();
 };
 
 #endif // MAINWINDOW_H

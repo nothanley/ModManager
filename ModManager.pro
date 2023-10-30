@@ -9,12 +9,14 @@ SOURCES += main.cpp\
     Widgets/BurgerMenu/burgermenu.cpp \
     WindowHandler/qwinwidget.cpp \
     WindowHandler/winnativewindow.cpp \
+    gamemanagerform.cpp \
     mainwindow.cpp
 
 HEADERS  += \
     Widgets/BurgerMenu/burgermenu.h \
     WindowHandler/qwinwidget.h \
     WindowHandler/winnativewindow.h \
+    gamemanagerform.h \
     mainwindow.h
 
 LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
@@ -22,6 +24,7 @@ LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
         -lgdi32
 
 FORMS += \
+    gamemanagerform.ui \
     mainwindow.ui
 
 RESOURCES += \
