@@ -36,6 +36,9 @@
     <Filter Include="Core\Sys\Bake\GameLink">
       <UniqueIdentifier>{d1b78e1d-17be-4981-a85c-d6864d98666a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\Controller">
+      <UniqueIdentifier>{0db598d8-85f4-4b5e-a2f1-d76473134f2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Sys\Bake\PackageBaker.cpp">
@@ -62,8 +65,11 @@
     <ClCompile Include="Utils\CRC32.cpp">
       <Filter>Utils\ThirdParty</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\ManagerController.cpp">
+    <ClCompile Include="Manager\GameProfile.cpp">
       <Filter>Manager\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\ManagerController.cpp">
+      <Filter>Manager\Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,9 +94,6 @@
     <ClInclude Include="Utils\ConfigUtils.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\ManagerController.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Manager\GameManager.h">
       <Filter>Manager\Game</Filter>
     </ClInclude>
@@ -99,6 +102,12 @@
     </ClInclude>
     <ClInclude Include="Utils\CRC32.h">
       <Filter>Utils\ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\GameProfile.h">
+      <Filter>Manager\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\ManagerController.h">
+      <Filter>Manager\Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

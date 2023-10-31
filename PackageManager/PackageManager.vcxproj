@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\GamePackage.cpp" />
+    <ClCompile Include="Manager\GameProfile.cpp" />
     <ClCompile Include="Manager\Game\WWE23\2K23Package.cpp" />
     <ClCompile Include="Manager\ManagerController.cpp" />
     <ClCompile Include="Utils\CRC32.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Core\Sys\Bake\PackageBaker.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\GamePackage.h" />
+    <ClInclude Include="Manager\GameProfile.h" />
     <ClInclude Include="Manager\Game\WWE23\2K23Package.h" />
     <ClInclude Include="Manager\ManagerController.h" />
     <ClInclude Include="Utils\ConfigUtils.hpp" />

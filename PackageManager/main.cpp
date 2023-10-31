@@ -9,6 +9,6 @@ int main()
 {
     
     /* Debug by inputting a relative json path */
-    CManagerController managerControllerDebug("ModConfiguration.json");
+    CManagerController managerControllerDebug("C:\\Users\\wauke\\source\\repos\\ModManager\\PackageManager\\x64\\Debug\\TestDirectory");
 
 }
