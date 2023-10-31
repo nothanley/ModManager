@@ -140,7 +140,7 @@ QPushButton::hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton{
-	image: url(:/icons/WindowHandler/icons/minimize.png);
+	image: url(:/icons/minimize.png);
 }</string>
          </property>
          <property name="text">
@@ -158,7 +158,7 @@ QPushButton::hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton{
-	image: url(:/icons/WindowHandler/icons/plus_checked.png);
+	image: url(:/icons/plus_checked.png);
 }</string>
          </property>
          <property name="text">
@@ -176,7 +176,7 @@ QPushButton::hover{
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton{
-	image: url(:/icons/WindowHandler/icons/x.png);
+	image: url(:/icons/x.png);
 	background-color: rgba(115, 40, 40,0);
 }
 

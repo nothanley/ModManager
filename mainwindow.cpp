@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Widgets/BurgerMenu/burgermenu.h"
-#include "gamemanagerform.h"
+#include "Widgets/GameManager/gamemanagerform.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,10 +37,10 @@ void MainWindow::InitLayoutWidgets(){
 void MainWindow::AddBurgerMenu(){
     BurgerMenu* menu     = new BurgerMenu();
     menu->setMaximumWidth(120);
-    menu->setBurgerIcon(QIcon(":/icons/Widgets/BurgerMenu/icons/burger.png"));
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/collections.png"), "Action 1");
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/folders.png"),     "Action 2");
-    menu->addMenuAction(QIcon(":/icons/Widgets/BurgerMenu/icons/albums.png"),      "Action 3");
+    menu->setBurgerIcon(QIcon(":/icons/burger.png"));
+    menu->addMenuAction(QIcon(":/icons/collections.png"), "Action 1");
+    menu->addMenuAction(QIcon(":/icons/folders.png"),     "Action 2");
+    menu->addMenuAction(QIcon("://icons/albums.png"),      "Action 3");
     this->centralWidget()->layout()->replaceWidget(ui->SideBarDummy,menu);
     delete ui->SideBarDummy;
 }

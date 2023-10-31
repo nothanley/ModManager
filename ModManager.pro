@@ -7,16 +7,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     Widgets/BurgerMenu/burgermenu.cpp \
+    Widgets/GameManager/gamemanagerform.cpp \
     WindowHandler/qwinwidget.cpp \
     WindowHandler/winnativewindow.cpp \
-    gamemanagerform.cpp \
     mainwindow.cpp
 
 HEADERS  += \
     Widgets/BurgerMenu/burgermenu.h \
+    Widgets/GameManager/gamemanagerform.h \
     WindowHandler/qwinwidget.h \
     WindowHandler/winnativewindow.h \
-    gamemanagerform.h \
     mainwindow.h
 
 LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
@@ -24,8 +24,9 @@ LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
         -lgdi32
 
 FORMS += \
-    gamemanagerform.ui \
+    Widgets/GameManager/gamemanagerform.ui \
     mainwindow.ui
 
 RESOURCES += \
-    burgermenu.qrc
+    Widgets/BurgerMenu/burgermenu.qrc \
+    WindowHandler/WindowHandler.qrc
