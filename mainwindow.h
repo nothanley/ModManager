@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QAction>
+#include <QDebug>
+
+class BurgerMenu;
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +32,8 @@ private:
     void InitGUIButtons();
     void AddBurgerMenu();
     void CreateGameManager();
+    void PerformSideBarAction(QAction* action);
+    void SetupGameSidebar(BurgerMenu* pSideBar);
 //    void AddBurgerMenu();
 };
 

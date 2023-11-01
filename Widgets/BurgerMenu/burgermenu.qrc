@@ -4,5 +4,8 @@
         <file>icons/burger.png</file>
         <file>icons/collections.png</file>
         <file>icons/folders.png</file>
+        <file>icons/game-sidebar-icon-placeholderdummy.png</file>
+        <file>icons/game-sidebar-dummy_gradient (1).jpg</file>
+        <file>icons/game-sidebar-dummy_gradient.png</file>
     </qresource>
 </RCC>

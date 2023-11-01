@@ -33,6 +33,7 @@ private:
 
     void CreateNewManagerConfig() {
         //todo: query GUI for values
+
         this->m_rootGamePath = "";
         this->m_gameTitle = "";
         this->m_NumProfiles = 0;
