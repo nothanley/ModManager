@@ -87,6 +87,7 @@ void
 MainWindow::CreateGameManager(){
     //todos: initialize CGameController to handle game types.
     // GameManagerForm should perform this init and could be subclassed for game types
+//    CManagerController control = new CManagerController("");
     GameManagerForm* menu     = new GameManagerForm();
     this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
     ui->BodyDummy->hide();

@@ -30,3 +30,7 @@ FORMS += \
 RESOURCES += \
     Widgets/BurgerMenu/burgermenu.qrc \
     WindowHandler/WindowHandler.qrc
+
+CONFIG+=c++2a
+DEFINES -= UNICODE
+DEFINES += _MBCS
