@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QDebug>
 
+
 class BurgerMenu;
 
 namespace Ui {
@@ -31,7 +32,7 @@ private:
     void InitLayoutWidgets();
     void InitGUIButtons();
     void AddBurgerMenu();
-    void CreateGameManager();
+    void CreateGameManager(const long long& gameHash);
     void PerformSideBarAction(QAction* action);
     void SetupGameSidebar(BurgerMenu* pSideBar);
 //    void AddBurgerMenu();

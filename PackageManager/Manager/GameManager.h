@@ -20,6 +20,9 @@ public:
         CollectJsonValues();
     }
 
+    std::string m_gameTitle;
+    std::string m_activeProfile;
+
 protected:
     std::string m_JsonPath;
     JSON m_ManagerJson;
@@ -27,8 +30,6 @@ protected:
 private:
     int m_NumProfiles;
     std::string m_rootGamePath;
-    std::string m_gameTitle;
-    std::string m_activeProfile;
     std::vector<CGameProfile> m_GameProfiles;
 
     void CreateNewManagerConfig() {

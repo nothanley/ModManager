@@ -9,7 +9,11 @@ using namespace ConfigUtils;
 class CManagerController {
 
 public:
-    ~CManagerController() {}
+    int m_NumGames = 0;
+    ~CManagerController() {
+        for (auto game:this->pGameManagers)
+            delete game;
+    }
 
     CManagerController(const char* path) {
         this->m_RootPath = path;
@@ -19,16 +23,19 @@ public:
         if (this->m_NumGames < 0) { SetupController(); }
     }
 
+    CGameManager* GetGameManager(const char* gameTitle){
+        for (const auto& manager : this->pGameManagers ){
+            if (manager->m_gameTitle == gameTitle)
+                return manager;
+        }
+        return nullptr;
+    }
+
 protected:
     std::string m_RootPath;
   
 private:
     std::vector<CGameManager*> pGameManagers;
-    int m_NumGames = 0;
-
-    void SetupController() {
-        //query GUI for values
-    }
 
     void InitializeManagers() {
 
@@ -36,9 +43,8 @@ private:
         std::string configPath = m_RootPath + "\\Games";
         std::vector<std::string> jsonPaths = FindExistingConfigs(configPath.c_str(),"game_config.json");
 
-        /* Debug output */
         this->m_NumGames = jsonPaths.size();
-        std::cout << "\nNumber of Titles: " << this->m_NumGames;
+//        std::cout << "\nNumber of Titles: " << this->m_NumGames; /* Debug output */
 
         /* Initialize valid game managers with specified jsons */
         for (const auto& path : jsonPaths) {
@@ -48,4 +54,5 @@ private:
 
     }
 
+    void SetupController() {}
 };

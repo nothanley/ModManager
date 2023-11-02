@@ -3,13 +3,6 @@
 #include "Widgets/BurgerMenu/burgermenu.h"
 #include "Widgets/GameManager/gamemanagerform.h"
 
-
-enum{
-    GAME_WWE_23 = 3210580021,
-    GAME_WWE_22 = 3210580020,
-};
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -42,12 +35,12 @@ MainWindow::InitLayoutWidgets(){
 
 void
 MainWindow::PerformSideBarAction(QAction* action){
-    quint32 actionMagic = qHash(action->iconText());
+    unsigned int actionMagic = qHash(action->iconText());
 
     switch(actionMagic){
         //todo: if manager exists, refocus old manager else create new manager
         case GAME_WWE_23:
-            CreateGameManager();
+            CreateGameManager(GAME_WWE_23);
             break;
         case GAME_WWE_22:
             break;
@@ -81,16 +74,16 @@ MainWindow::AddBurgerMenu(){
 }
 
 
-#include "PackageManager/Manager/ManagerController.h"
-
 void
-MainWindow::CreateGameManager(){
+MainWindow::CreateGameManager(const long long& gameHash){
     //todos: initialize CGameController to handle game types.
     // GameManagerForm should perform this init and could be subclassed for game types
-//    CManagerController control = new CManagerController("");
-    GameManagerForm* menu     = new GameManagerForm();
-    this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
-    ui->BodyDummy->hide();
+    GameManagerForm* menu     = new GameManagerForm(gameHash,this);
+    if (menu->isEnabled())
+    {
+        this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
+        ui->BodyDummy->hide();
+    }
 }
 
 

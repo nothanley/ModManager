@@ -35,7 +35,7 @@ WinNativeWindow::WinNativeWindow(const int x, const int y, const int width, cons
     wcx.lpfnWndProc = WndProc;
     wcx.cbClsExtra = 0;
     wcx.cbWndExtra = 0;
-    wcx.lpszClassName = L"WindowClass";
+    wcx.lpszClassName = "WindowClass";
     wcx.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
     wcx.hCursor = LoadCursor(hInstance, IDC_ARROW);
 
@@ -47,7 +47,7 @@ WinNativeWindow::WinNativeWindow(const int x, const int y, const int width, cons
     }
 
     //Create a native window with the appropriate style
-    hWnd = CreateWindow(L"WindowClass", L"WindowTitle", aero_borderless, x, y, width, height, 0, 0, hInstance, nullptr);
+    hWnd = CreateWindow("WindowClass", "WindowTitle", aero_borderless, x, y, width, height, 0, 0, hInstance, nullptr);
     if (!hWnd)
     {
         throw std::runtime_error("couldn't create window because of reasons");

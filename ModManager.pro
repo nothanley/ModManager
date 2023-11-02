@@ -10,14 +10,16 @@ SOURCES += main.cpp\
     Widgets/GameManager/gamemanagerform.cpp \
     WindowHandler/qwinwidget.cpp \
     WindowHandler/winnativewindow.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qtgameutils.cpp
 
 HEADERS  += \
     Widgets/BurgerMenu/burgermenu.h \
     Widgets/GameManager/gamemanagerform.h \
     WindowHandler/qwinwidget.h \
     WindowHandler/winnativewindow.h \
-    mainwindow.h
+    mainwindow.h \
+    qtgameutils.hpp
 
 LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
         -ldwmapi \
