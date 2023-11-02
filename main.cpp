@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
 
     int windowXPos = 450;
     int windowYPos = 125;
-    int windowWidth = 1024;
-    int windowHeight = 768;
+    int windowWidth = 1080;
+    int windowHeight = 720;
 
     QWinWidget w;
     w.setGeometry(windowXPos, windowYPos, windowWidth, windowHeight);

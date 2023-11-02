@@ -12,6 +12,9 @@
 static const QString BurgerButtonObjectName("BurgerButton");
 static const QString BurgerMenuName("BurgerMenu");
 static const QString MainBurgerButtonObjectName("MainBurgerButton");
+static const int SIDEBAR_WIDTH = 68;
+static const int SIDEBAR_ICON_WIDTH = 68;
+static const int SIDEBAR_ICON_HEIGHT = 48;
 
 class BurgerButton : public QPushButton
 {
@@ -71,14 +74,14 @@ BurgerMenu::BurgerMenu(QWidget* parent)
     : QWidget(parent)
     , mActions(new QActionGroup(this))
     , mBurgerButton(new QPushButton(this))
-    , mMenuWidth(90)
+    , mMenuWidth(SIDEBAR_WIDTH)
     , mAnimated(true)
 {
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mBurgerButton->setObjectName(MainBurgerButtonObjectName);
     mBurgerButton->setFlat(true);
-    mBurgerButton->setIconSize(QSize(48,48));
-    mBurgerButton->setFixedSize(48,48);
+    mBurgerButton->setIconSize(QSize(SIDEBAR_ICON_WIDTH,SIDEBAR_ICON_HEIGHT));
+    mBurgerButton->setFixedSize(SIDEBAR_ICON_WIDTH,SIDEBAR_ICON_HEIGHT);
     mBurgerButton->setCheckable(true);
     mBurgerButton->setCursor(Qt::PointingHandCursor);
     this->setMouseTracking(true);
@@ -99,11 +102,13 @@ BurgerMenu::BurgerMenu(QWidget* parent)
 
     lay->addLayout(burgerLay);
     lay->addStretch();
-    setFixedWidth(48);
+    setFixedWidth(SIDEBAR_WIDTH);
 
-    connect(mBurgerButton, &QPushButton::toggled, this, &BurgerMenu::setExpansionState);
-    connect(mBurgerButton, &QPushButton::toggled, this, &BurgerMenu::expandedChanged);
+//    connect(mBurgerButton, &QPushButton::toggled, this, &BurgerMenu::setExpansionState);
+//    connect(mBurgerButton, &QPushButton::toggled, this, &BurgerMenu::expandedChanged);
     connect(mActions, &QActionGroup::triggered, this, &BurgerMenu::triggered);
+
+    lay->setAlignment(burgerLay,Qt::AlignCenter);
 }
 
 QIcon BurgerMenu::burgerIcon() const
@@ -143,7 +148,8 @@ QAction*BurgerMenu::addMenuAction(const QString& label)
 
 QAction*BurgerMenu::addMenuAction(const QIcon& icon, const QString& label)
 {
-    auto action = mActions->addAction(icon, label);
+    auto action = mActions->addAction(icon,"");
+    action->setObjectName(label);
     action->setCheckable(true);
     registerAction(action);
     return action;
@@ -220,8 +226,10 @@ void BurgerMenu::registerAction(QAction* action)
 {
     auto button = new BurgerButton(action, this);
     button->setIconSize(mBurgerButton->iconSize());
+    button->setFixedSize(SIDEBAR_ICON_WIDTH,SIDEBAR_ICON_HEIGHT);
     auto lay = static_cast<QVBoxLayout*>(layout());
     lay->insertWidget(lay->count() - 1, button);
+    lay->setAlignment(button,Qt::AlignCenter);
 }
 
 void BurgerMenu::unRegisterAction(QAction* action)

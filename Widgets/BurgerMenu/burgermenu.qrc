@@ -7,5 +7,7 @@
         <file>icons/game-sidebar-icon-placeholderdummy.png</file>
         <file>icons/game-sidebar-dummy_gradient (1).jpg</file>
         <file>icons/game-sidebar-dummy_gradient.png</file>
+        <file>icons/icon-highlight.png</file>
+        <file>icons/icon-hover.png</file>
     </qresource>
 </RCC>

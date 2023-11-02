@@ -21,6 +21,10 @@ public:
         CollectJsonValues();
     }
 
+    std::string getProfileName(){
+        return this->m_ProfileName;
+    }
+
 protected:
     std::string m_JsonPath;
     JSON m_ProfileJson;

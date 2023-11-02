@@ -10,6 +10,7 @@ SOURCES += main.cpp\
     Widgets/GameManager/gamemanagerform.cpp \
     WindowHandler/qwinwidget.cpp \
     WindowHandler/winnativewindow.cpp \
+    gamecard.cpp \
     mainwindow.cpp \
     qtgameutils.cpp
 
@@ -18,6 +19,7 @@ HEADERS  += \
     Widgets/GameManager/gamemanagerform.h \
     WindowHandler/qwinwidget.h \
     WindowHandler/winnativewindow.h \
+    gamecard.h \
     mainwindow.h \
     qtgameutils.hpp
 
@@ -27,6 +29,7 @@ LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
 
 FORMS += \
     Widgets/GameManager/gamemanagerform.ui \
+    gamecard.ui \
     mainwindow.ui
 
 RESOURCES += \

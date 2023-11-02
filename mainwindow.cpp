@@ -35,7 +35,7 @@ MainWindow::InitLayoutWidgets(){
 
 void
 MainWindow::PerformSideBarAction(QAction* action){
-    unsigned int actionMagic = qHash(action->iconText());
+    unsigned int actionMagic = qHash(action->objectName());
 
     switch(actionMagic){
         //todo: if manager exists, refocus old manager else create new manager
@@ -54,7 +54,7 @@ MainWindow::PerformSideBarAction(QAction* action){
 void
 MainWindow::SetupGameSidebar(BurgerMenu* pSideBar){
 
-    pSideBar->setMaximumWidth(120);
+    pSideBar->setMinimumWidth(62);
     pSideBar->setBurgerIcon(QIcon(":/icons/burger.png"));
     pSideBar->addMenuAction(QIcon("://icons/game-sidebar-icon-placeholderdummy.png"),"WWE 2K23");
     pSideBar->addMenuAction(QIcon("://icons/game-sidebar-icon-placeholderdummy.png"),"WWE 2K22");
@@ -79,11 +79,11 @@ MainWindow::CreateGameManager(const long long& gameHash){
     //todos: initialize CGameController to handle game types.
     // GameManagerForm should perform this init and could be subclassed for game types
     GameManagerForm* menu     = new GameManagerForm(gameHash,this);
-    if (menu->isEnabled())
-    {
-        this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
-        ui->BodyDummy->hide();
-    }
+    if (!menu->isEnabled()){ return; }
+
+    this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
+    ui->BodyDummy->hide();
+
 }
 
 

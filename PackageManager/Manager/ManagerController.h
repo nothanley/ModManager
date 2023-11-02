@@ -25,7 +25,7 @@ public:
 
     CGameManager* GetGameManager(const char* gameTitle){
         for (const auto& manager : this->pGameManagers ){
-            if (manager->m_gameTitle == gameTitle)
+            if (manager->getGameName() == gameTitle)
                 return manager;
         }
         return nullptr;
