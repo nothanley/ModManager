@@ -25,15 +25,22 @@ public:
         return this->m_ProfileName;
     }
 
+    std::vector<CGamePackage*> getAllMods(){
+        return this->m_PackageLoadOrder;
+    }
+
+    void addModPackage(CGamePackage* contents){
+        this->m_PackageLoadOrder.push_back(contents);
+    }
+
 protected:
+    std::vector<CGamePackage*> m_PackageLoadOrder = {nullptr};
     std::string m_JsonPath;
     JSON m_ProfileJson;
 
 private:
     std::string m_ProfileName;
     std::vector<std::string> m_ModPaths;
-    std::vector<CGamePackage*> m_PackageLoadOrder;
-
     void CreateNewProfileConfig() {
         m_ProfileName = "Default";
         m_ModPaths = {};
@@ -50,7 +57,7 @@ private:
             m_ModPaths.push_back(modPath);
             
             CGamePackage* gameMod = new CGamePackage(modPath.c_str());
-            if (gameMod->m_AssetPath != "")
+            if (gameMod->getPath() != "")
                 { this->m_PackageLoadOrder.push_back(gameMod); }
         }
 

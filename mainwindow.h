@@ -6,7 +6,7 @@
 #include <QAction>
 #include <QDebug>
 
-
+class GameManagerForm;
 class BurgerMenu;
 
 namespace Ui {
@@ -25,9 +25,11 @@ public:
     QPushButton* minimizeButton = nullptr;
     QPushButton* closeButton = nullptr;
     QWidget* toolBar = nullptr;
-
+protected:
+    void ClearContentForm();
 private:
     Ui::MainWindow *ui;
+    GameManagerForm* pManagerForm=nullptr;
 
     void InitLayoutWidgets();
     void InitGUIButtons();

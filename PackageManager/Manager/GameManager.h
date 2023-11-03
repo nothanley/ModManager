@@ -22,8 +22,8 @@ public:
         return this->m_gameTitle;
     }
 
-    CGameProfile getActiveProfile(){
-        return *this->m_activeProfile;
+    CGameProfile* getActiveProfile(){
+        return this->m_activeProfile;
     }
 
     std::string getActiveProfileName(){

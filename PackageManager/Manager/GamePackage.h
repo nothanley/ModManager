@@ -6,11 +6,21 @@ using namespace ConfigUtils;
 class CGamePackage {
 
 public:
-    std::string m_PackageName;
-    std::string m_ThumbnailPath;
-    std::string m_AssetPath;
-    bool isEnabled = false;
-    int m_LoadIndex;
+
+    CGamePackage( const char* packageName, int index ){
+        this->m_JsonPath =  std::string("");
+        this->m_PackageName = packageName;
+        this->m_ThumbnailPath =  std::string("dummy_thumbnail_path");
+        this->m_AssetPath = std::string("dummy_asset_path");
+        this->isEnabled = true;
+        this->m_LoadIndex = index;
+        this->m_AuthorName = "Unknown";
+        this->m_CreationDate = "Unknown";
+        this->m_PackageType = "Misc";
+        this->m_FileSize = 0;
+        this->m_GameTitle = "Unknown";
+        this->m_ReplacementTitle = "None";
+    }
 
     CGamePackage(const char* path) {
         this->m_JsonPath = path;
@@ -23,11 +33,47 @@ public:
         CollectJsonValues();
     }
 
+    std::string getPath(){
+        return this->m_AssetPath;
+    }
+
+    std::string getName(){
+        return this->m_PackageName;
+    }
+
+    std::string getType(){
+        return this->m_PackageType;
+    }
+
+    unsigned int getSize(){
+        return this->m_FileSize;
+    }
+
+    int getIndex(){
+        return this->m_LoadIndex;
+    }
+
+    bool getStatus(){
+        return this->isEnabled;
+    }
+
+    std::string m_AuthorName;
+    std::string m_GameTitle;
+    std::string m_ReplacementTitle;
+
 protected:
     std::string m_JsonPath;
     JSON m_ProfileJson;
 
 private:
+    std::string m_CreationDate;
+    unsigned int m_FileSize;
+    std::string m_PackageName;
+    std::string m_PackageType;
+    std::string m_ThumbnailPath;
+    std::string m_AssetPath;
+    bool isEnabled = false; /* todo: make this protected or friend class variable*/
+    int m_LoadIndex;
 
     void CollectJsonValues() {
 

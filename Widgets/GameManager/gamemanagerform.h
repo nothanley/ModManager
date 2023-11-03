@@ -10,6 +10,7 @@ enum{
     GAME_WWE_22 = 0xbf5d9034,
 };
 class GameCard;
+class GameStatsTable;
 
 namespace Ui {
 class GameManagerForm;
@@ -29,12 +30,19 @@ public:
 private slots:
     void on_GridSizeSlider_valueChanged(int value);
 
+protected:
+    void ClearGrid();
+    void ResetLayout();
+
 private:
     int m_CustomGridScale = 5;
-    void ClearGrid();
     void GetManagerLayoutGeneral();
     void InitializeManagerSettings();
     void PopulateManagerGUI();
+    void InitializeStatsTable();
+
+
+    GameStatsTable* pStatsTable = nullptr;
     Ui::GameManagerForm *ui;
     CManagerController* m_CTRLManager = nullptr;
     CGameManager* pGameManager = nullptr;

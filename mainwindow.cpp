@@ -34,8 +34,17 @@ MainWindow::InitLayoutWidgets(){
 }
 
 void
+MainWindow::ClearContentForm(){
+    if (pManagerForm){
+        delete this->pManagerForm;
+        this->pManagerForm = nullptr;
+    }
+}
+
+void
 MainWindow::PerformSideBarAction(QAction* action){
     unsigned int actionMagic = qHash(action->objectName());
+    ClearContentForm();
 
     switch(actionMagic){
         //todo: if manager exists, refocus old manager else create new manager
@@ -78,11 +87,10 @@ void
 MainWindow::CreateGameManager(const long long& gameHash){
     //todos: initialize CGameController to handle game types.
     // GameManagerForm should perform this init and could be subclassed for game types
-    GameManagerForm* menu     = new GameManagerForm(gameHash,this);
-    if (!menu->isEnabled()){ return; }
+    this->pManagerForm     = new GameManagerForm(gameHash,this);
+    if (!pManagerForm->isEnabled()){ return; }
 
-    this->centralWidget()->layout()->replaceWidget(ui->BodyDummy,menu);
-    ui->BodyDummy->hide();
+   ui->BodyDummy->layout()->addWidget(pManagerForm);
 
 }
 
