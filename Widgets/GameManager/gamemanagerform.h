@@ -11,6 +11,7 @@ enum{
 };
 class GameCard;
 class GameStatsTable;
+class PreviewPanel;
 
 namespace Ui {
 class GameManagerForm;
@@ -27,6 +28,9 @@ public:
     void
     PopulateCardGrid(QGridLayout *gridWidget);
 
+public Q_SLOTS:
+    void PopulatePreviewPanel(CGamePackage* selectedMod);
+
 private slots:
     void on_GridSizeSlider_valueChanged(int value);
 
@@ -40,12 +44,14 @@ private:
     void InitializeManagerSettings();
     void PopulateManagerGUI();
     void InitializeStatsTable();
+    void InitializePreviewPanel();
 
 
     GameStatsTable* pStatsTable = nullptr;
     Ui::GameManagerForm *ui;
     CManagerController* m_CTRLManager = nullptr;
     CGameManager* pGameManager = nullptr;
+    PreviewPanel* pPreviewPanel = nullptr;
     std::vector<GameCard*> pGameCards;
 };
 

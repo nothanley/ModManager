@@ -24,7 +24,7 @@ QTGameUtils::GetUserRoamingPath(const QString& gameTitle){
 
 void
 QTGameUtils::CreateGameJSON(const QString& gamePath, bool* isReadyFile){
-   if ( FileExistsOnDisk(gamePath) ){
+   if ( FileExistsOnDisk(gamePath+"/game_config.json") ){
         /* todo: check json integrity */
         *isReadyFile = true;
         return; }

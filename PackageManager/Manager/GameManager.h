@@ -27,7 +27,7 @@ public:
     }
 
     std::string getActiveProfileName(){
-        return this->m_gameTitle;
+        return this->m_activeProfileID;
     }
 
     unsigned int getProfileCount(){
@@ -37,6 +37,32 @@ public:
     bool hasActiveProfile(){
         return (this->m_activeProfile);
     }
+
+    void setActiveProfile( CGameProfile* profile ){
+        this->m_activeProfile = profile; // Please Change this to pointers, the profile will eventually be out of scope
+
+        if ( !isExistingProfile( profile->getProfileName().c_str() ) ){
+            this->m_GameProfiles.push_back(*profile);
+        }
+
+
+        this->m_activeProfileID = profile->getProfileName();
+    }
+
+    void addNewProfile(const char* name, bool setActive=false){
+        CGameProfile* profile = new CGameProfile();
+        profile->setName(name);
+
+        if ( !isExistingProfile( name ) ){
+            this->m_GameProfiles.push_back(*profile);
+        }
+
+        if (setActive){
+            setActiveProfile(profile);
+        }
+
+    }
+
 
 protected:
     std::string m_gameTitle;
@@ -49,6 +75,15 @@ private:
     std::string m_rootGamePath;
     std::vector<CGameProfile> m_GameProfiles;
     CGameProfile* m_activeProfile = nullptr;
+
+    bool isExistingProfile(const char* targetName){
+        for (auto profile : this->m_GameProfiles){
+            if ( profile.getProfileName() == targetName )
+                return true;
+        }
+        return false;
+    }
+
 
     void CreateNewManagerConfig() {
         this->m_rootGamePath = "";

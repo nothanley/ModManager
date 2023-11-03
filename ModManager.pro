@@ -13,6 +13,7 @@ SOURCES += main.cpp\
     gamecard.cpp \
     gamestatstable.cpp \
     mainwindow.cpp \
+    previewpanel.cpp \
     qtgameutils.cpp
 
 HEADERS  += \
@@ -23,6 +24,7 @@ HEADERS  += \
     gamecard.h \
     gamestatstable.h \
     mainwindow.h \
+    previewpanel.h \
     qtgameutils.hpp
 
 LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
@@ -33,7 +35,8 @@ FORMS += \
     Widgets/GameManager/gamemanagerform.ui \
     gamecard.ui \
     gamestatstable.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    previewpanel.ui
 
 RESOURCES += \
     Widgets/BurgerMenu/burgermenu.qrc \

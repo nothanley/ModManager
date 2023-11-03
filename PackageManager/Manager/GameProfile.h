@@ -7,6 +7,12 @@ class CGameProfile {
 public:
     int m_NumMods = 0;
 
+    CGameProfile() {
+        m_JsonPath = "";
+        m_ProfileName = "Default";
+        m_NumMods = 0;
+    }
+
     CGameProfile(const char* path) {
         this->m_JsonPath = path;
         bool canAccessFile = isFileAccessable(this->m_JsonPath);
@@ -25,6 +31,10 @@ public:
         return this->m_ProfileName;
     }
 
+    void setName(const char* name){
+        this->m_ProfileName = name;
+    }
+
     std::vector<CGamePackage*> getAllMods(){
         return this->m_PackageLoadOrder;
     }
@@ -34,20 +44,20 @@ public:
     }
 
 protected:
-    std::vector<CGamePackage*> m_PackageLoadOrder = {nullptr};
+    std::vector<CGamePackage*> m_PackageLoadOrder = {};
     std::string m_JsonPath;
     JSON m_ProfileJson;
 
 private:
     std::string m_ProfileName;
     std::vector<std::string> m_ModPaths;
+
     void CreateNewProfileConfig() {
         m_ProfileName = "Default";
         m_ModPaths = {};
     }
 
     void CollectJsonValues() { 
-
         this->m_ProfileName = m_ProfileJson["Profile Name"];
         this->m_NumMods = m_ProfileJson["Total Mods"];
         

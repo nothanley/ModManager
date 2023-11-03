@@ -8,10 +8,10 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication app(argc, argv);
 
-    int windowXPos = 450;
+    int windowXPos = 425;
     int windowYPos = 125;
-    int windowWidth = 1080;
-    int windowHeight = 720;
+    int windowWidth = 1280;
+    int windowHeight = 800;
 
     QWinWidget w;
     w.setGeometry(windowXPos, windowYPos, windowWidth, windowHeight);
