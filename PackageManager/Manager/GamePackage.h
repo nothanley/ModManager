@@ -57,9 +57,17 @@ public:
         return this->isEnabled;
     }
 
-    std::string m_AuthorName;
-    std::string m_GameTitle;
-    std::string m_ReplacementTitle;
+    std::string getAuthor(){
+        return this->m_AuthorName;
+    }
+
+    std::string getGameName(){
+        return this->m_GameTitle;
+    }
+
+    std::string getReplaceAssetName(){
+        return this->m_ReplacementTitle;
+    }
 
 protected:
     std::string m_JsonPath;
@@ -67,11 +75,15 @@ protected:
 
 private:
     std::string m_CreationDate;
-    unsigned int m_FileSize;
     std::string m_PackageName;
     std::string m_PackageType;
     std::string m_ThumbnailPath;
     std::string m_AssetPath;
+    std::string m_AuthorName;
+    std::string m_GameTitle;
+    std::string m_ReplacementTitle;
+
+    unsigned int m_FileSize;
     bool isEnabled = false; /* todo: make this protected or friend class variable*/
     int m_LoadIndex;
 

@@ -25,8 +25,8 @@ void PopulateRightTable(QTableWidget* table,CGamePackage* selectedMod){
     // Populate Items
     table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getSize() )));
     table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getIndex() )));
-    table->setItem( 3,0,new QTableWidgetItem( selectedMod->m_GameTitle.c_str() ) );
-    table->setItem( 4,0,new QTableWidgetItem( selectedMod->m_ReplacementTitle.c_str() ));
+    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getGameName().c_str() ) );
+    table->setItem( 4,0,new QTableWidgetItem( selectedMod->getReplaceAssetName().c_str() ));
 }
 
 void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
@@ -38,7 +38,7 @@ void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
 
     // Populate Items
     table->setItem( 0,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
-    table->setItem( 1,0,new QTableWidgetItem( selectedMod->m_AuthorName.c_str() ) );
+    table->setItem( 1,0,new QTableWidgetItem( selectedMod->getAuthor().c_str() ) );
     table->setItem( 3,0,new QTableWidgetItem( selectedMod->getType().c_str() ) );
     table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
 }
