@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 
     int windowXPos = 425;
     int windowYPos = 125;
-    int windowWidth = 1280;
+    int windowWidth = 1220;
     int windowHeight = 800;
 
     QWinWidget w;

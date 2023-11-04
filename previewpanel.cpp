@@ -29,7 +29,7 @@ PreviewPanel::updatePreview(CGamePackage *userPackage){
     qDebug() << "Preview mod: " << userPackage->getName().c_str();
 
     QString authorText = QString("Author: ") + QString(userPackage->getAuthor().c_str());
-    QString itemDescription = QString("Description: ") + QString("No Description.");
+    QString itemDescription = QString("Description: ") + QString(userPackage->getDescription().c_str() );
 
     ui->titleLabel->setText( userPackage->getName().c_str() );
     ui->authorLabel->setText( authorText );
@@ -45,5 +45,17 @@ PreviewPanel::RefreshListPanel(){
         ui->ListWidget->addItem( gamePackage->getName().c_str() );
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -4,5 +4,7 @@
         <file>icons/plus.png</file>
         <file>icons/plus_checked.png</file>
         <file>icons/x.png</file>
+        <file>icons/placeholder_background.png</file>
+        <file>icons/logo_main_icon.png</file>
     </qresource>
 </RCC>

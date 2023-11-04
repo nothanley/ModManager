@@ -33,10 +33,12 @@ public Q_SLOTS:
 
 private slots:
     void on_GridSizeSlider_valueChanged(int value);
+    void on_HomeLabel_clicked();
 
 protected:
     void ClearGrid();
     void ResetLayout();
+    void RefreshGameStats();
 
 private:
     int m_CustomGridScale = 5;

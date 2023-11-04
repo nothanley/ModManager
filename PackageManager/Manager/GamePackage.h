@@ -20,6 +20,7 @@ public:
         this->m_FileSize = 0;
         this->m_GameTitle = "Unknown";
         this->m_ReplacementTitle = "None";
+        this->m_PackageDescription = "No Description.";
     }
 
     CGamePackage(const char* path) {
@@ -43,6 +44,10 @@ public:
 
     std::string getType(){
         return this->m_PackageType;
+    }
+
+    std::string getDescription(){
+        return this->m_PackageDescription;
     }
 
     unsigned int getSize(){
@@ -69,6 +74,10 @@ public:
         return this->m_ReplacementTitle;
     }
 
+    void setDescription(const char* description){
+        this->m_PackageDescription = description;
+    }
+
 protected:
     std::string m_JsonPath;
     JSON m_ProfileJson;
@@ -82,6 +91,7 @@ private:
     std::string m_AuthorName;
     std::string m_GameTitle;
     std::string m_ReplacementTitle;
+    std::string m_PackageDescription;
 
     unsigned int m_FileSize;
     bool isEnabled = false; /* todo: make this protected or friend class variable*/

@@ -8,7 +8,6 @@
 #include <QLayout>
 using namespace QTGameUtils;
 
-static const int GRID_WIDTH = 4;
 static const int CARD_WIDTH = 40;
 static const int CARD_HEIGHT = 22;
 static const float GRID_SCALE = 0.8;
@@ -60,7 +59,6 @@ GameManagerForm::PopulateManagerGUI(){
     switch(m_GameHash){
         case GAME_WWE_23:
             pGameManager = m_CTRLManager->GetGameManager("WWE 2K23");
-
             /* Debug Populate empty profile. Alter after GUI build. */
             if (!pGameManager->hasActiveProfile()){
                 pGameManager->addNewProfile("Default",true);
@@ -81,14 +79,13 @@ GameManagerForm::InitializeManagerSettings(){
     QString roamingPath = GetUserRoamingPath();
     SetupManagerConfig(roamingPath);
 
-    qDebug() << roamingPath;
     this->m_CTRLManager = new CManagerController( roamingPath.toStdString().c_str() );
     if (m_CTRLManager->m_NumGames == 0){
         qDebug() << "No Games Loaded.";
         Q_ASSERT(m_CTRLManager->m_NumGames == 0);
         return; }
 
-    qDebug() << "Loaded user config";
+    qDebug() << "Loaded User Config: " << roamingPath;
 }
 
 void
@@ -98,18 +95,25 @@ GameManagerForm::InitializePreviewPanel(){
     ui->RightPanelLayout->layout()->addWidget(this->pPreviewPanel);
 }
 
+void
+GameManagerForm::RefreshGameStats(){
+    ui->GameLabel->setText( pGameManager->getGameName().c_str() );
+    ui->ModCountLabel->setText( QString::number( pGameManager->getActiveProfile()->getModCount() ) + " MODS" );
+    ui->ProfileLabel->setText( "PROFILE: " + QString::fromStdString( pGameManager->getActiveProfile()->getProfileName() ) ) ;
+    ui->CountLabel2->setText( QString::number( pGameManager->getProfileCount() ) + " PROFILES" ) ;
+}
 
 void
 GameManagerForm::GetManagerLayoutGeneral(){
     if (!this->pGameManager || !this->pGameManager->hasActiveProfile()){
         Q_ASSERT( this->pGameManager || !this->pGameManager->hasActiveProfile() );
-        qDebug() << "Could not load layout. Invalid Manager";
-    }
+        qDebug() << "Could not load layout. Invalid Manager";    }
 
 
     this->setEnabled(true);
     ui->setupUi(this);
 
+    RefreshGameStats();
     InitializeStatsTable();
     InitializePreviewPanel();
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
@@ -157,46 +161,18 @@ void GameManagerForm::on_GridSizeSlider_valueChanged(int value)
 {
     ClearGrid();
     this->m_CustomGridScale = value;
-    int numGameCards = pGameManager->getActiveProfile()->getAllMods().size();
 
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
-    int numCells = GRID_WIDTH;
-
-    for (int i = 0; i < numGameCards; i++){
-        CGamePackage* gamePack = pGameManager->getActiveProfile()->getAllMods()[i];
-        GameCard* gameTile = new GameCard(this, gamePack );
-        gameTile->setFixedSize( QSize(
-                                   m_CustomGridScale * CARD_WIDTH,
-                                   m_CustomGridScale * CARD_HEIGHT) );
-
-        this->pGameCards.push_back(gameTile);
-        if (m_CustomGridScale * CARD_WIDTH >= 240)
-            numCells = GRID_WIDTH - abs(GRID_WIDTH - (int(GRID_SCALE * m_CustomGridScale)));
-
-        cardGrid->addWidget( gameTile,
-                             i / numCells,
-                             i % numCells );
-
-        QObject::connect(gameTile, &GameCard::TableUpdate, this->pStatsTable, &GameStatsTable::UpdateStatsTable );
-    }
-    qDebug() << "Created " << QString::number(numGameCards) << " Game Card(s)";
+    PopulateCardGrid(cardGrid);
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void GameManagerForm::on_HomeLabel_clicked()
+{
+    qDebug() << "Home activated";
+    this->close();
+}
 
 
 

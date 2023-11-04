@@ -3,15 +3,34 @@
 #include "Widgets/BurgerMenu/burgermenu.h"
 #include "Widgets/GameManager/gamemanagerform.h"
 
+#include <QGraphicsBlurEffect>
+
+void iterateWidgetsRecursively(QObject* widget) {
+
+    if (!widget) return;
+    for (int i = 0; i < widget->children().size(); ++i) {
+        QObject* childWidget = widget->children().at(i);
+        if (childWidget->isWidgetType()) {
+            QWidget* widget = static_cast<QWidget*>(childWidget);
+            widget->setGraphicsEffect({});
+            iterateWidgetsRecursively(childWidget);
+        }
+    }
+}
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
+    ui->AppFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->BuildLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
     // Inits layout functionality and MinMaxClose buttons
     InitLayoutWidgets();
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -78,7 +97,7 @@ MainWindow::AddBurgerMenu(){
     BurgerMenu* menu     = new BurgerMenu();
     SetupGameSidebar(menu);
 
-    this->centralWidget()->layout()->replaceWidget(ui->SideBarDummy,menu);
+    ui->centralwidget->layout()->replaceWidget(ui->SideBarDummy,menu);
     delete ui->SideBarDummy;
 }
 

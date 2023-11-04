@@ -43,6 +43,10 @@ public:
         this->m_PackageLoadOrder.push_back(contents);
     }
 
+    unsigned int getModCount(){
+        return this->m_PackageLoadOrder.size();
+    }
+
 protected:
     std::vector<CGamePackage*> m_PackageLoadOrder = {};
     std::string m_JsonPath;
