@@ -41,7 +41,7 @@ protected:
     void RefreshGameStats();
 
 private:
-    int m_CustomGridScale = 5;
+    double m_CustomGridScale = 46;
     void GetManagerLayoutGeneral();
     void InitializeManagerSettings();
     void PopulateManagerGUI();

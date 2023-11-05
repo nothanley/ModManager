@@ -8,9 +8,9 @@
 #include <QLayout>
 using namespace QTGameUtils;
 
-static const int CARD_WIDTH = 40;
-static const int CARD_HEIGHT = 22;
-static const float GRID_SCALE = 0.8;
+static const int CARD_WIDTH = 28 * 10;
+static const int CARD_HEIGHT = 16 * 10;
+static const float GRID_SCALE = 0.925 * 10;
 
 GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :
     QWidget(parent),
@@ -116,7 +116,10 @@ GameManagerForm::GetManagerLayoutGeneral(){
     RefreshGameStats();
     InitializeStatsTable();
     InitializePreviewPanel();
+
+    ui->GridSizeSlider->setValue(this->m_CustomGridScale);
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
+    cardGrid->setSpacing(20);
     PopulateCardGrid( cardGrid );
 }
 
@@ -135,19 +138,19 @@ GameManagerForm::PopulateCardGrid(QGridLayout* gridLayout){
         CGamePackage* gamePack = pGameManager->getActiveProfile()->getAllMods()[i];
         GameCard* gameTile = new GameCard(this, gamePack );
         gameTile->setFixedSize( QSize(
-                                   m_CustomGridScale * CARD_WIDTH,
-                                   m_CustomGridScale * CARD_HEIGHT) );
-
+                                   m_CustomGridScale/10.0 * CARD_WIDTH/10.0,
+                                   m_CustomGridScale/10.0 * CARD_HEIGHT/10.0) );
+        gameTile->decorate();
         this->pGameCards.push_back(gameTile);
         gridLayout->addWidget( gameTile,
-                             i / int(GRID_SCALE * m_CustomGridScale),
-                             i % int(GRID_SCALE * m_CustomGridScale) );
+                             i / int(GRID_SCALE/10.0 * m_CustomGridScale/10.0),
+                             i % int(GRID_SCALE /10.0* m_CustomGridScale/10.0) );
 
         QObject::connect(gameTile, &GameCard::TableUpdate, this->pStatsTable, &GameStatsTable::UpdateStatsTable );
         QObject::connect(gameTile, &GameCard::TableUpdate, this, &GameManagerForm::PopulatePreviewPanel );
     }
 
-    qDebug() << "Created " << QString::number(numGameCards) << " Game Card(s)";
+//    qDebug() << "Created " << QString::number(numGameCards) << " Game Card(s)";
 }
 
 void GameManagerForm::ClearGrid(){
@@ -162,6 +165,7 @@ void GameManagerForm::on_GridSizeSlider_valueChanged(int value)
     ClearGrid();
     this->m_CustomGridScale = value;
 
+    qDebug() << "VALUE: " << value;
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
     PopulateCardGrid(cardGrid);
 }

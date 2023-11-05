@@ -23,7 +23,7 @@ public:
 
 private:
 
-    void RefreshListPanel();
+    void refresh();
 
     Ui::PreviewPanel *ui;
     CGameProfile* pUserProfile = nullptr;

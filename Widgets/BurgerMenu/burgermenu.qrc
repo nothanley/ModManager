@@ -5,9 +5,12 @@
         <file>icons/collections.png</file>
         <file>icons/folders.png</file>
         <file>icons/game-sidebar-icon-placeholderdummy.png</file>
-        <file>icons/game-sidebar-dummy_gradient (1).jpg</file>
-        <file>icons/game-sidebar-dummy_gradient.png</file>
         <file>icons/icon-highlight.png</file>
         <file>icons/icon-hover.png</file>
+        <file>icons/card_mask_0_io.svg</file>
+        <file>icons/card_overlay_outline.svg</file>
+        <file>icons/card_overlay_outline_2.svg</file>
+        <file>icons/card_overlay_outline.png</file>
+        <file>icons/card_bg_dummy.png</file>
     </qresource>
 </RCC>

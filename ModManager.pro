@@ -1,4 +1,5 @@
 QT       += core gui
+QT += svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -45,3 +46,4 @@ RESOURCES += \
 CONFIG+=c++2a
 DEFINES -= UNICODE
 DEFINES += _MBCS
+

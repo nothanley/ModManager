@@ -19,7 +19,7 @@ PreviewPanel::~PreviewPanel()
 void
 PreviewPanel::setModel(CGameProfile *profile){
     this->pUserProfile = profile;
-    RefreshListPanel();
+    this->refresh();
 }
 
 void
@@ -37,7 +37,7 @@ PreviewPanel::updatePreview(CGamePackage *userPackage){
 }
 
 void
-PreviewPanel::RefreshListPanel(){
+PreviewPanel::refresh(){
     if (!pUserProfile) return;
 
     ui->ListWidget->clear();
