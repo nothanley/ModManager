@@ -23,4 +23,5 @@ namespace QTGameUtils{
 
     void SetupManagerConfig(const QString& roamingPath);
 
+    QString getRandomFilePath(const QString &directoryPath);
 };

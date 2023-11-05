@@ -14,6 +14,11 @@
 #include <QPainterPath>
 #include <QHoverEvent>
 
+
+#include <QDir>
+#include <QFileInfo>
+#include <QRandomGenerator>
+
 GameCard::GameCard(QWidget *parent, CGamePackage* gameMod) :
     QWidget(parent),
     ui(new Ui::GameCard)
@@ -31,12 +36,19 @@ GameCard::~GameCard()
     delete ui;
 }
 
-void GameCard::hoverEnter(QHoverEvent * event) {
+bool
+GameCard::isEmptyCard(){
+    return (this->pGameMod == nullptr);
+}
+
+void
+GameCard::hoverEnter(QHoverEvent * event) {
     this->m_IsUserHovering = true;
     this->m_IsHoverDecorated = false;
 }
 
-void GameCard::hoverLeave(QHoverEvent * event) {
+void
+GameCard::hoverLeave(QHoverEvent * event) {
     this->m_IsUserHovering = false;
     this->m_IsHoverDecorated = false;
 
@@ -44,12 +56,14 @@ void GameCard::hoverLeave(QHoverEvent * event) {
     this->pLabelGraphic = nullptr;
 }
 
-void GameCard::hoverMove(QHoverEvent * event) {
+void
+GameCard::hoverMove(QHoverEvent * event) {
 //    this->m_IsUserHovering = true;
 //    qDebug() << Q_FUNC_INFO << this->objectName();
 }
 
-bool GameCard::event(QEvent * e)
+bool
+GameCard::event(QEvent * e)
 {
     switch(e->type())
     {
@@ -71,24 +85,6 @@ bool GameCard::event(QEvent * e)
     return QWidget::event(e);
 }
 
-
-QPixmap
-GameCard::drawCardGraphics(){
-
-    QPixmap PixmapToBeMasked(this->size());
-    PixmapToBeMasked.fill(Qt::transparent);
-
-    QPainter backgroundPainter(&PixmapToBeMasked);
-    backgroundPainter.setRenderHint(QPainter::Antialiasing);
-    backgroundPainter.setRenderHint(QPainter::SmoothPixmapTransform);
-
-    // ** Draw Image
-    QImage sa(":/icons/card_bg_dummy.png");
-    backgroundPainter.drawImage(rect(), sa);
-    backgroundPainter.end();
-    return PixmapToBeMasked;
-}
-
 void
 toggleTransparentPainter(QPainter* painter){
     painter->setRenderHint(QPainter::Antialiasing);
@@ -96,16 +92,8 @@ toggleTransparentPainter(QPainter* painter){
     painter->setCompositionMode(QPainter::CompositionMode_Xor);
 }
 
-void
-GameCard::drawBorderMask( QPixmap* background ){
-    QPainter maskPainter(background);
-    toggleTransparentPainter(&maskPainter);
-
-    m_SvgRenderer.render(&maskPainter);
-    maskPainter.end();
-}
-
-QPixmap CreateGradientMap( const QSize& size, QColor gradient_x, QColor gradient_y=Qt::transparent,
+QPixmap
+CreateGradientMap( const QSize& size, QColor gradient_x, QColor gradient_y=Qt::transparent,
                            QSvgRenderer* mask=nullptr ) {
 
     QPixmap pixmap(size);
@@ -132,25 +120,131 @@ QPixmap CreateGradientMap( const QSize& size, QColor gradient_x, QColor gradient
     return pixmap;
 }
 
-void
-GameCard::drawHoverOverlay( QPixmap* background, const qreal opacity ){
+QPixmap
+GameCard::drawVacantGraphics(){
+    QPixmap PixmapToBeMasked(this->size());
+    PixmapToBeMasked.fill(Qt::black);
 
-    // Draw Gradient Borders
-    QPixmap gradientBorder = CreateGradientMap( size(),
-                                          QColor(90,90,235),
-                                          QColor(180,120,235),
-                                          &m_OverlaySvg  );
-    // Draw Border as overlay
-    drawBorderMask(&gradientBorder);
+    QPainter backgroundPainter(&PixmapToBeMasked);
+    backgroundPainter.setRenderHint(QPainter::Antialiasing);
+    backgroundPainter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+    // Draw Gradient
+    QPixmap gradient = CreateGradientMap( size(),
+                                          QColor(60,60,80),
+                                          QColor(70,70,80) );
+    backgroundPainter.drawPixmap(0,0,gradient);
+
+    // ** Draw add symbol overlay
+    backgroundPainter.setOpacity(1);
+    backgroundPainter.setCompositionMode(QPainter::CompositionMode_Screen);
+    QSvgRenderer layoutGenShineSvg(QString(":/icons/card_add_overlay.svg"));
+    layoutGenShineSvg.render(&backgroundPainter);
+
+    if (this->m_IsUserHovering){
+        // ** Draw hover effects
+        layoutGenShineSvg.render(&backgroundPainter);
+        backgroundPainter.end();
+        drawBorderMask(&PixmapToBeMasked);
+    }
+    else{
+        backgroundPainter.end();
+    }
+
+    // Draw a border gradient
+    drawHoverOverlay(&PixmapToBeMasked,1,QColor(10,10,10), QColor(95,95,95));
+    return PixmapToBeMasked;
+}
+
+QString getRandomFilePath(const QString &directoryPath) {
+    QDir directory(directoryPath);
+    QStringList files = directory.entryList(QDir::Files);
+
+    if (files.isEmpty()) {
+        return QString(); // Return an empty QString if the directory is empty
+    }
+
+    int randomIndex = QRandomGenerator::global()->bounded(files.size());
+    QString randomFile = files[randomIndex];
+
+    return directoryPath + "/" + randomFile;
+}
+
+QPixmap
+GameCard::drawCardGraphics(){
+
+    QPixmap PixmapToBeMasked(this->size());
+    PixmapToBeMasked.fill(Qt::black);
+
+    QPainter backgroundPainter(&PixmapToBeMasked);
+    backgroundPainter.setRenderHint(QPainter::Antialiasing);
+    backgroundPainter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+    // ** Draw Image
+    QImage layoutGenBGImg(":/icons/card_bg_dummy.png");
+#if defined(DEBUG_MODE_ENABLED)
+    layoutGenBGImg = QImage( getRandomFilePath(
+                QString("C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates" ) ) );
+#endif
+
+    backgroundPainter.drawImage(rect(), layoutGenBGImg.scaled( this->size()) );
+
+    // ** Add Card Effects
+    backgroundPainter.setOpacity(OVERLAY_WEIGHT);
+    backgroundPainter.setCompositionMode(QPainter::CompositionMode_Screen);
+    QImage layoutGenShineImg(":/icons/card_sheen_overlay.png");
+    backgroundPainter.drawImage(rect(), layoutGenShineImg.scaled( this->size()) );
+
+    // ** Finalize Painter
+    backgroundPainter.end();
+    return PixmapToBeMasked;
+}
+
+void
+shaveAndStretchPixmap(QPixmap* pixmap, int left, int right, int top, int bottom) {
+    QPixmap originalPixmap = *pixmap;
+    int width = originalPixmap.width() - left - right;
+    int height = originalPixmap.height() - top - bottom;
+
+    if (width > 0 && height > 0) {
+        QPixmap stretchedPixmap = originalPixmap.copy(left, top, width, height);
+        *pixmap = stretchedPixmap.scaled(originalPixmap.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation); }
+}
+
+void
+GameCard::drawBorderMask( QPixmap* background ){
     QPainter maskPainter(background);
     toggleTransparentPainter(&maskPainter);
-    maskPainter.setCompositionMode(QPainter::CompositionMode_Screen);
+    maskPainter.setCompositionMode(QPainter::CompositionMode_Xor);
+
+    m_SvgRenderer.render(&maskPainter);
+    maskPainter.end();
+    shaveAndStretchPixmap(background,1,1,1,1);
+}
+
+
+void
+GameCard::drawHoverOverlay( QPixmap* background, const qreal opacity,
+                            const QColor& gradientX, const QColor& gradientY ){
+
+    // Draw Gradient Borders
+    QPixmap gradientMap = CreateGradientMap( size(),
+                                          gradientX,
+                                          gradientY,
+                                          &m_OverlaySvg  );
+    // Draw Border as overlay
+    drawBorderMask(&gradientMap);
+    QPainter maskPainter(background);
+    toggleTransparentPainter(&maskPainter);
 
     // Apply painter
+    maskPainter.setCompositionMode(QPainter::CompositionMode_Screen);
     maskPainter.setOpacity(opacity);
-    maskPainter.drawPixmap(0,0,gradientBorder);
+    maskPainter.drawPixmap(0,0,gradientMap);
+
     maskPainter.end();
 }
+
 
 void
 GameCard::paintEvent(QPaintEvent *event){
@@ -159,13 +253,20 @@ GameCard::paintEvent(QPaintEvent *event){
     // redraw only if we need to
     if ( !this->pLabelGraphic ){
         pLabelGraphic = new QPixmap();
-        *pLabelGraphic = drawCardGraphics();
+        *pLabelGraphic = this->isEmptyCard() ? drawVacantGraphics() : drawCardGraphics();
         drawBorderMask(this->pLabelGraphic);
     }
 
     // implement unique hover style
     if ( m_IsUserHovering && !m_IsHoverDecorated ){
-        drawHoverOverlay(this->pLabelGraphic,.6);
+        if (this->isEmptyCard())
+            *pLabelGraphic = drawVacantGraphics();
+        drawHoverOverlay(this->pLabelGraphic,1,
+                         QColor(10,10,10), QColor(150,190,250) );
+        drawHoverOverlay(this->pLabelGraphic,1,
+                         QColor(10,10,10), QColor(150,190,250)  );
+        drawHoverOverlay(this->pLabelGraphic,1,
+                         QColor(10,10,10), QColor(150,190,250)  );
         this->m_IsHoverDecorated = true;
     }
 
@@ -183,14 +284,16 @@ GameCard::decorate(){
     effect->setColor(QColor(0,0,0,60));
     effect->setOffset(2,2);
     this->setGraphicsEffect(effect);
-    ui->GameCardButton->setText(this->pGameMod->getName().c_str());
 
+    if ( this->isEmptyCard() || !this->isTextEnabled() ) return;
+    ui->GameCardButton->setText(this->pGameMod->getName().c_str());
 }
 
 
 
 void GameCard::on_GameCardButton_clicked()
 {
+    if ( this->isEmptyCard() ) return;
     TableUpdate(this->pGameMod);
 }
 

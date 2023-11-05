@@ -30,7 +30,7 @@
 QFrame{
 	border: 3px  rgba(0,0,0,110);
 	border-radius: 8px;
-	background-color: rgba(0, 0, 0,110);
+	background-color: rgba(40,40, 40,110);
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -80,8 +80,13 @@ QFrame{
         <widget class="QLabel" name="PreviewLabel">
          <property name="styleSheet">
           <string notr="true">QLabel{
-	background-color: black;
-	border-radius: 10px;
+background-color: qlineargradient(spread: pad, 
+	x1:0, y1:1.25,
+	x2:0, y2:0, 
+	stop:0 rgba(20, 20, 20, 120), 
+	stop:1 rgba(0, 0, 0, 0)
+	);
+	border-radius: 0px;
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
 }</string>
@@ -103,7 +108,7 @@ QFrame{
           <string notr="true">QFrame{
 	background-color: qlineargradient(spread: pad, 
 	x1:0, y1:0,
-	x2:0, y2:1.25, 
+	x2:0, y2:1, 
 	stop:0 rgba(20, 20, 20, 120), 
 	stop:1 rgba(0, 0, 0, 0)
 	);
@@ -253,10 +258,11 @@ QLabel{
 	color: white;
 }
 QFrame{
+	border-radius: 0px;
 	background-color: qlineargradient(spread: pad, 
 	x1:0, y1:0,
 	x2:0, y2:1.25, 
-	stop:0 rgba(20, 20, 20, 120), 
+	stop:0 rgba(25, 25, 25, 120), 
 	stop:1 rgba(0, 0, 0, 0)
 	);
 }</string>
@@ -283,6 +289,34 @@ QFrame{
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 0, 0);
+border-radius: 9px;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QTimeEdit" name="timeEdit"/>
+          </item>
+          <item>
+           <widget class="QTimeEdit" name="timeEdit_2"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="LoadOrderLabel">
          <property name="minimumSize">
@@ -340,6 +374,9 @@ QFrame{
            <kerning>true</kerning>
           </font>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -348,7 +385,7 @@ QFrame{
          </property>
          <property name="styleSheet">
           <string notr="true">QWidget{
-	color: white;
+	color: rgba(255, 255, 255, 223);
 }
 
 QListWidget{
@@ -360,14 +397,15 @@ QListWidget{
 }
 
 QListWidget::item{
+	color: rgba(255, 255, 255, 223);
 	background-color: qlineargradient(
 	 spread:pad, 
- 	 x1:0, y1:1,
-	 x2:0, y2:0,
-	 stop:0 rgba(45, 45, 45, 255),
-	 stop:1 rgba(55, 55, 55, 255));
+ 	 x1:0, y1:0,
+	 x2:1, y2:0,
+	 stop:0 rgba(45, 45, 45, 150),
+	 stop:1 rgba(55, 55, 55, 110));
 
-	border: 1px solid rgb(70, 70, 70);
+	border: 0px solid rgb(70, 70, 70);
 	border-radius: 3px;
 }
 
@@ -376,10 +414,10 @@ QListWidget::item:hover{
 	 spread:pad, 
  	 x1:0, y1:1,
 	 x2:0, y2:0,
-	 stop:0 rgba(55, 55, 55, 255),
-	 stop:1 rgba(65, 65, 65, 255));
+	 stop:0 rgba(55, 55, 55, 150),
+	 stop:1 rgba(65, 65, 65, 150));
 
-	border: 1px solid rgb(70, 70, 70);
+	border: 0px solid rgb(70, 70, 70);
 	border-radius: 3px;
 }
 </string>
@@ -454,7 +492,7 @@ QListWidget::item:hover{
           <bool>true</bool>
          </property>
          <property name="wordWrap">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="selectionRectVisible">
           <bool>false</bool>

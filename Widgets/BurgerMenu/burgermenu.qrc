@@ -7,10 +7,12 @@
         <file>icons/game-sidebar-icon-placeholderdummy.png</file>
         <file>icons/icon-highlight.png</file>
         <file>icons/icon-hover.png</file>
-        <file>icons/card_mask_0_io.svg</file>
         <file>icons/card_overlay_outline.svg</file>
-        <file>icons/card_overlay_outline_2.svg</file>
-        <file>icons/card_overlay_outline.png</file>
         <file>icons/card_bg_dummy.png</file>
+        <file>icons/card_mask.svg</file>
+        <file>icons/border_mask.svg</file>
+        <file>icons/card_sheen_overlay.png</file>
+        <file>icons/card_add_overlay.png</file>
+        <file>icons/card_add_overlay.svg</file>
     </qresource>
 </RCC>

@@ -32,8 +32,9 @@ public Q_SLOTS:
     void PopulatePreviewPanel(CGamePackage* selectedMod);
 
 private slots:
-    void on_GridSizeSlider_valueChanged(int value);
     void on_HomeLabel_clicked();
+    void on_sizeDownButton_clicked();
+    void on_sizeUpButton_clicked();
 
 protected:
     void ClearGrid();
@@ -41,7 +42,14 @@ protected:
     void RefreshGameStats();
 
 private:
-    double m_CustomGridScale = 46;
+    static const int CARD_WIDTH = 30 * 10;
+    static const int CARD_HEIGHT = 18 * 10;
+    static constexpr float GRID_SCALE = 13;
+    static constexpr float MIN_GRID_SCALE = 44;
+    static constexpr float MAX_GRID_SCALE = 90;
+    static const int DEBUG_TOTAL_CARDS = 27;
+
+    double m_CustomGridScale = 44;
     void GetManagerLayoutGeneral();
     void InitializeManagerSettings();
     void PopulateManagerGUI();

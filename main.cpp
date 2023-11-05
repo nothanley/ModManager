@@ -1,6 +1,8 @@
 #include <QApplication>
 #include "WindowHandler/qwinwidget.h"
 
+#define DEBUG_BUILD
+
 int main(int argc, char *argv[])
 {    
     //This has the app draw at HiDPI scaling on HiDPI displays, usually two pixels for every one logical pixel

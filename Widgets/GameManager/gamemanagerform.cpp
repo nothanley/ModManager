@@ -8,10 +8,6 @@
 #include <QLayout>
 using namespace QTGameUtils;
 
-static const int CARD_WIDTH = 28 * 10;
-static const int CARD_HEIGHT = 16 * 10;
-static const float GRID_SCALE = 0.925 * 10;
-
 GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameManagerForm)
@@ -62,7 +58,7 @@ GameManagerForm::PopulateManagerGUI(){
             /* Debug Populate empty profile. Alter after GUI build. */
             if (!pGameManager->hasActiveProfile()){
                 pGameManager->addNewProfile("Default",true);
-                AddDebugPackages(this->pGameManager,32);
+                AddDebugPackages(this->pGameManager,DEBUG_TOTAL_CARDS);
             }
 
             GetManagerLayoutGeneral();
@@ -117,7 +113,6 @@ GameManagerForm::GetManagerLayoutGeneral(){
     InitializeStatsTable();
     InitializePreviewPanel();
 
-    ui->GridSizeSlider->setValue(this->m_CustomGridScale);
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
     cardGrid->setSpacing(20);
     PopulateCardGrid( cardGrid );
@@ -134,9 +129,13 @@ GameManagerForm::PopulateCardGrid(QGridLayout* gridLayout){
 
     int numGameCards = pGameManager->getActiveProfile()->getAllMods().size();
 
-    for (int i = 0; i < numGameCards; i++){
-        CGamePackage* gamePack = pGameManager->getActiveProfile()->getAllMods()[i];
-        GameCard* gameTile = new GameCard(this, gamePack );
+    for (int i = 0; i < numGameCards+1; i++){
+
+        CGamePackage* gamePack = nullptr;
+        if (i < numGameCards)
+            gamePack = pGameManager->getActiveProfile()->getAllMods()[i];
+
+        GameCard* gameTile = new GameCard( this, gamePack );
         gameTile->setFixedSize( QSize(
                                    m_CustomGridScale/10.0 * CARD_WIDTH/10.0,
                                    m_CustomGridScale/10.0 * CARD_HEIGHT/10.0) );
@@ -160,18 +159,6 @@ void GameManagerForm::ClearGrid(){
 }
 
 
-void GameManagerForm::on_GridSizeSlider_valueChanged(int value)
-{
-    ClearGrid();
-    this->m_CustomGridScale = value;
-
-    qDebug() << "VALUE: " << value;
-    QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
-    PopulateCardGrid(cardGrid);
-}
-
-
-
 void GameManagerForm::on_HomeLabel_clicked()
 {
     qDebug() << "Home activated";
@@ -179,7 +166,26 @@ void GameManagerForm::on_HomeLabel_clicked()
 }
 
 
+void GameManagerForm::on_sizeDownButton_clicked()
+{
+    ClearGrid();
+    this->m_CustomGridScale = (m_CustomGridScale < MIN_GRID_SCALE) ?
+                MIN_GRID_SCALE : m_CustomGridScale-1;
+
+    qDebug() << "VALUE: " << m_CustomGridScale;
+    QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
+    PopulateCardGrid(cardGrid);
+}
 
 
+void GameManagerForm::on_sizeUpButton_clicked()
+{
+    ClearGrid();
+    this->m_CustomGridScale = (m_CustomGridScale > MAX_GRID_SCALE) ?
+                MAX_GRID_SCALE : m_CustomGridScale+1;
 
+    qDebug() << "VALUE: " << m_CustomGridScale;
+    QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
+    PopulateCardGrid(cardGrid);
+}
 

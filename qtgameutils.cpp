@@ -70,3 +70,23 @@ QTGameUtils::SetupManagerConfig(const QString& roamingPath){
     SetupGameConfig("WWE 2K23");
     SetupGameConfig("WWE 2K22");
 }
+
+
+#include <QDir>
+#include <QRandomGenerator>
+#include <QImage>
+
+QString
+QTGameUtils::getRandomFilePath(const QString &directoryPath) {
+    QDir directory(directoryPath);
+    QStringList files = directory.entryList(QDir::Files);
+
+    if (files.isEmpty()) {
+        return QString(); // Return an empty QString if the directory is empty
+    }
+
+    int randomIndex = QRandomGenerator::global()->bounded(files.size());
+    QString randomFile = files[randomIndex];
+
+    return directoryPath + "/" + randomFile;
+}

@@ -3,6 +3,7 @@
 #include "PackageManager/Manager/GameProfile.h"
 #include "PackageManager/Manager/GamePackage.h"
 #include <QDebug>
+#include "qtgameutils.hpp"
 
 PreviewPanel::PreviewPanel(QWidget *parent) :
     QWidget(parent),
@@ -22,6 +23,8 @@ PreviewPanel::setModel(CGameProfile *profile){
     this->refresh();
 }
 
+
+
 void
 PreviewPanel::updatePreview(CGamePackage *userPackage){
     //todo: update thumbnail
@@ -34,6 +37,16 @@ PreviewPanel::updatePreview(CGamePackage *userPackage){
     ui->titleLabel->setText( userPackage->getName().c_str() );
     ui->authorLabel->setText( authorText );
     ui->descriptionLabel->setText( itemDescription );
+
+    // Update Preview Image
+    QImage layoutGenBGImg(":/icons/card_bg_dummy.png");
+    #if defined(DEBUG_MODE_ENABLED)
+    layoutGenBGImg = QImage( QTGameUtils::getRandomFilePath(
+                QString("C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates" ) ) );
+    layoutGenBGImg = layoutGenBGImg.scaled( ui->PreviewLabel->size(),Qt::KeepAspectRatio );
+
+    ui->PreviewLabel->setPixmap(QPixmap::fromImage(layoutGenBGImg));
+    #endif
 }
 
 void

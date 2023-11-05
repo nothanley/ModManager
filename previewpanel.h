@@ -1,5 +1,6 @@
 #ifndef PREVIEWPANEL_H
 #define PREVIEWPANEL_H
+#define DEBUG_MODE_ENABLED
 
 #include <QWidget>
 
