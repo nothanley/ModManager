@@ -24,12 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    CreateBuildID();
 
     ui->IconFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->BuildLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
-    // Inits layout functionality and MinMaxClose buttons
-//    ui->WindowTitle->setDisabled(true);
     ui->leftAppFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
+    qDebug() << "Running CakeSuite " + ui->BuildLabel->text();
+
     InitLayoutWidgets();
 }
 
@@ -37,6 +38,26 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void
+MainWindow::CreateBuildID(){
+    QStringList buildList = {
+            QString::number( MAJOR_VER_ ),
+            QString::number( UI_VER_ ),
+            QString::number( TOOL_VER_),
+            QString::number( SYS_VER_ ),
+            QString::number( REVISION_ )
+    };
+
+#ifdef DEV_BUILD
+    this->buildType = "DEV";
+#endif
+
+    buildType = QStringList( { buildType,
+                               "Build",
+                               buildList.join(".") } ).join(" ");
+    ui->BuildLabel->setText( buildType );
 }
 
 void

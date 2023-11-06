@@ -3,7 +3,7 @@
 #include <QWidget>
 #include "QtSvg/qsvgrenderer.h"
 #include <QSvgRenderer>
-#define DEBUG_MODE_ENABLED
+#include <QPainter>
 
 class CGamePackage;
 class QSvgRenderer;
@@ -23,7 +23,9 @@ public:
     void decorate();
     bool isEmptyCard();
     bool isTextEnabled(){ return this->m_bShowText; }
+    bool isUserHovering(){ return this->m_IsUserHovering; }
     void setTextVisible(bool toggle){ this->m_bShowText =toggle;}
+    void setHoverDecoration();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -39,6 +41,12 @@ private:
     constexpr static const QColor PALLETE_GRAD_X = QColor(90,90,235);
     constexpr static const QColor PALLETE_GRAD_Y = QColor(180,120,235);
     constexpr static const double OVERLAY_WEIGHT = .2;
+    QSvgRenderer m_SvgRenderer = QSvgRenderer(QString(":/icons/card_mask.svg"));
+    QSvgRenderer m_OverlaySvg = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
+
+    /* Debug Constants */
+    constexpr static bool DEBUG_CARDS = true;
+    const QString DBG_TEMPLATE_DIR = "C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates";
 
     void hoverEnter(QHoverEvent * event);
     void hoverLeave(QHoverEvent * event);
@@ -49,12 +57,12 @@ private:
     bool m_IsHoverDecorated = false;
     bool m_IsEmptyCard = true;
 
-    QSvgRenderer m_SvgRenderer = QSvgRenderer(QString(":/icons/card_mask.svg"));
-    QSvgRenderer m_OverlaySvg = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
     QPixmap* pLabelGraphic = nullptr;
-
     QPixmap drawVacantGraphics();
     QPixmap drawCardGraphics();
+
+    void drawImageToPainter(QPainter* painter, const QString& imagePath, QSize *mapSize=nullptr );
+    void drawImageOverlayToPainter(QPainter* painter, const QString& overlayPath, const float &opacity, QSize *mapSize=nullptr );
     void drawBorderMask( QPixmap* background );
     void drawHoverOverlay( QPixmap* background, const qreal opacity=1.0,
                             const QColor& gradientX=PALLETE_GRAD_X, const QColor& gradientY=PALLETE_GRAD_Y );

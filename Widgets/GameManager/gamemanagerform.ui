@@ -830,7 +830,7 @@ color: white;
             </property>
             <property name="styleSheet">
              <string notr="true">QWidget{
-	color:  rgb(255,255,255,180);
+	color:  rgba(255,255,255,180);
 	background-color: rgb(50,50,50);
 	border: 5px solid rgb(50,50,50);
 	border-radius: 9px;
@@ -867,7 +867,7 @@ background-color: rgba(255, 0, 0,0);
 }
 
 QWidget{
-	color:  rgb(255,255,255,180);
+	color:  rgba(255,255,255,180);
 	background-color: rgb(50,50,50);
 	border: 5px solid rgb(50,50,50);
 	border-radius: 9px;
@@ -1009,7 +1009,7 @@ background-color: rgba(255, 0, 0,0);
 }
 
 QPushButton{
-	color:  rgb(255,255,255,180);
+	color:  rgba(255,255,255,180);
 	background-color: rgb(50,50,50);
 	border: 5px solid rgb(50,50,50);
 	border-radius: 9px;
@@ -1061,7 +1061,7 @@ QPushButton::selected{
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton{
-	color:  rgb(255,255,255,180);
+	color:  rgba(255,255,255,180);
 	background-color: rgb(50,50,50);
 	border: 5px solid rgb(50,50,50);
 	border-radius: 9px;

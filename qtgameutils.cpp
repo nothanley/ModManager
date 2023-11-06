@@ -76,6 +76,7 @@ QTGameUtils::SetupManagerConfig(const QString& roamingPath){
 #include <QRandomGenerator>
 #include <QImage>
 
+
 QString
 QTGameUtils::getRandomFilePath(const QString &directoryPath) {
     QDir directory(directoryPath);

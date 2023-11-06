@@ -572,7 +572,9 @@ QLabel{
             <property name="font">
              <font>
               <family>Nirmala UI</family>
-              <pointsize>8</pointsize>
+              <pointsize>7</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -733,8 +735,8 @@ QPushButton::hover{
   </widget>
  </widget>
  <resources>
-  <include location="Widgets/BurgerMenu/burgermenu.qrc"/>
   <include location="WindowHandler/WindowHandler.qrc"/>
+  <include location="Widgets/BurgerMenu/burgermenu.qrc"/>
  </resources>
  <connections/>
 </ui>

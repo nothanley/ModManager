@@ -25,6 +25,7 @@ HEADERS  += \
     gamecard.h \
     gamestatstable.h \
     mainwindow.h \
+    pixmaputils.hpp \
     previewpanel.h \
     qtgameutils.hpp
 
