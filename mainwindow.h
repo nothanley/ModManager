@@ -27,6 +27,10 @@ public:
     QWidget* toolBar = nullptr;
 protected:
     void ClearContentForm();
+private slots:
+
+    void on_githubButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     GameManagerForm* pManagerForm=nullptr;

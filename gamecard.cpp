@@ -19,6 +19,10 @@
 #include <QFileInfo>
 #include <QRandomGenerator>
 
+QT_BEGIN_NAMESPACE
+  extern Q_WIDGETS_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
+QT_END_NAMESPACE
+
 GameCard::GameCard(QWidget *parent, CGamePackage* gameMod) :
     QWidget(parent),
     ui(new Ui::GameCard)
@@ -170,6 +174,7 @@ QString getRandomFilePath(const QString &directoryPath) {
     return directoryPath + "/" + randomFile;
 }
 
+
 QPixmap
 GameCard::drawCardGraphics(){
 
@@ -186,8 +191,19 @@ GameCard::drawCardGraphics(){
     layoutGenBGImg = QImage( getRandomFilePath(
                 QString("C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates" ) ) );
 #endif
+//    layoutGenBGImg = layoutGenBGImg.scaled( this->size());
+    backgroundPainter.drawImage(rect(), layoutGenBGImg.scaled( this->size())  );
 
-    backgroundPainter.drawImage(rect(), layoutGenBGImg.scaled( this->size()) );
+//    // ** Blur Test Overlay
+//    if ( this->m_IsUserHovering && !this->isEmptyCard() ){
+//        qt_blurImage( &backgroundPainter,layoutGenBGImg , 6, true, false );
+//        backgroundPainter.setFont( QFont("Segoe UI Variable Small",5));
+//        backgroundPainter.setPen(QPen(Qt::white));
+//        backgroundPainter.drawText(layoutGenBGImg.rect(), Qt::AlignCenter, this->pGameMod->getName().c_str());
+//    }
+//    else{
+//        backgroundPainter.drawImage(rect(), layoutGenBGImg );
+//    }
 
     // ** Add Card Effects
     backgroundPainter.setOpacity(OVERLAY_WEIGHT);
@@ -263,8 +279,6 @@ GameCard::paintEvent(QPaintEvent *event){
             *pLabelGraphic = drawVacantGraphics();
         drawHoverOverlay(this->pLabelGraphic,1,
                          QColor(10,10,10), QColor(150,190,250) );
-        drawHoverOverlay(this->pLabelGraphic,1,
-                         QColor(10,10,10), QColor(150,190,250)  );
         drawHoverOverlay(this->pLabelGraphic,1,
                          QColor(10,10,10), QColor(150,190,250)  );
         this->m_IsHoverDecorated = true;

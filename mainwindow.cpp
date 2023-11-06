@@ -25,9 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->AppFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
+    ui->IconFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->BuildLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
     // Inits layout functionality and MinMaxClose buttons
+//    ui->WindowTitle->setDisabled(true);
+    ui->leftAppFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
     InitLayoutWidgets();
 }
 
@@ -113,15 +115,11 @@ MainWindow::CreateGameManager(const long long& gameHash){
 
 }
 
+#include <QUrl>
+#include <QDesktopServices>
 
-
-
-
-
-
-
-
-
-
-
+void MainWindow::on_githubButton_clicked()
+{
+    QDesktopServices::openUrl ( QUrl("https://github.com/nothanley/ModManager") );
+}
 

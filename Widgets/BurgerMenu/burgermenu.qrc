@@ -14,5 +14,7 @@
         <file>icons/card_sheen_overlay.png</file>
         <file>icons/card_add_overlay.png</file>
         <file>icons/card_add_overlay.svg</file>
+        <file>icons/icon_github.png</file>
+        <file>icons/icon_kofi.png</file>
     </qresource>
 </RCC>
