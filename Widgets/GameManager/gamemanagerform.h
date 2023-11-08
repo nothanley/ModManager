@@ -8,7 +8,12 @@
 enum{
     GAME_WWE_23 = 0xbf5d9035,
     GAME_WWE_22 = 0xbf5d9034,
+    TYPE_CHAR = 1110555230,
+    TYPE_ARENA = 1110555198,
+    TYPE_MISC = 1110555118,
+    TYPE_MOVIE = 1110555142,
 };
+
 class GameCard;
 class GameStatsTable;
 class PreviewPanel;
@@ -40,6 +45,7 @@ protected:
     void ClearGrid();
     void ResetLayout();
     void RefreshGameStats();
+    void RefreshRibbonStats();
 
 private:
     static const int CARD_WIDTH = 30 * 10;

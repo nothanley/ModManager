@@ -1,6 +1,7 @@
 #include "gamestatstable.h"
 #include "ui_gamestatstable.h"
 #include "PackageManager/Manager/GamePackage.h"
+#include <QPushButton>
 #include <QDebug>
 
 GameStatsTable::GameStatsTable(QWidget *parent) :
@@ -52,10 +53,24 @@ void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
     table->setVerticalHeaderLabels( headerLabels );
 
     // Populate Items
-//    table->setItem( 0,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
-//    table->setItem( 1,0,new QTableWidgetItem( selectedMod->getAuthor().c_str() ) );
-//    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getType().c_str() ) );
-//    table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
+    table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getFileVersion())) );
+    table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getMD5())) );
+
+
+    // Enable Button
+    QPushButton* enableButton = new QPushButton();
+    enableButton->setText("Enable");
+    table->setCellWidget(2,0,enableButton);
+
+    // Extract Button
+    QPushButton* extractButton = new QPushButton();
+    extractButton->setText("Extract Contents");
+    table->setCellWidget(3,0,extractButton);
+
+    // Edit Button
+    QPushButton* editButton = new QPushButton();
+    editButton->setText("Edit Details");
+    table->setCellWidget(4,0,editButton);
 }
 
 void

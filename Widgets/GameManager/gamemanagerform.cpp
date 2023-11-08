@@ -100,6 +100,34 @@ GameManagerForm::RefreshGameStats(){
 }
 
 void
+GameManagerForm::RefreshRibbonStats(){
+    int numCharacters = 0,
+        numArenas = 0,
+        numMovies = 0,
+        numMiscMods= 0;
+
+    for (const auto& gameMod : this->pGameManager->getActiveProfile()->getAllMods() )
+        switch( qHash( gameMod->getType().c_str() ) ){
+            case TYPE_CHAR:
+                numCharacters++;
+                break;
+            case TYPE_ARENA:
+                numArenas++;
+                break;
+            case TYPE_MOVIE:
+                numMovies++;
+                break;
+            default:
+                numMiscMods++;
+                break;  }
+
+    ui->CharacterLabel->setText("Characters Installed: " + QString::number(numCharacters));
+    ui->ArenasLabel->setText("Arenas Installed: " + QString::number(numArenas));
+    ui->MoviesLabel->setText("Movies Installed: " + QString::number(numMovies));
+    ui->MiscLabel->setText("Misc Installed: " + QString::number(numMiscMods));
+}
+
+void
 GameManagerForm::GetManagerLayoutGeneral(){
     if (!this->pGameManager || !this->pGameManager->hasActiveProfile()){
         Q_ASSERT( this->pGameManager || !this->pGameManager->hasActiveProfile() );
@@ -116,6 +144,7 @@ GameManagerForm::GetManagerLayoutGeneral(){
     QGridLayout* cardGrid = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
     cardGrid->setSpacing(20);
     PopulateCardGrid( cardGrid );
+    RefreshRibbonStats();
 }
 
 void

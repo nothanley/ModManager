@@ -34,7 +34,8 @@ void
 GameCard::hoverEnter(QHoverEvent * event) {
     this->m_IsUserHovering = true;
     this->m_IsHoverDecorated = false;
-    setHoverDecoration();
+    if (this->pLabelGraphic != nullptr)
+        setHoverDecoration();
 }
 
 void
@@ -192,7 +193,7 @@ GameCard::drawCardGraphics(){
     }
 
 
-    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
+//    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
     backgroundPainter.end();
 
     // Draw Opaque borders around image

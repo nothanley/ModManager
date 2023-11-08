@@ -8,19 +8,16 @@ class CGamePackage {
 public:
 
     CGamePackage( const char* packageName, int index ){
-        this->m_JsonPath =  std::string("");
         this->m_PackageName = packageName;
-        this->m_ThumbnailPath =  std::string("dummy_thumbnail_path");
-        this->m_AssetPath = std::string("dummy_asset_path");
-        this->isEnabled = true;
+        this->m_IsEnabled = false;
         this->m_LoadIndex = index;
         this->m_AuthorName = "Unknown";
         this->m_CreationDate = "Unknown";
         this->m_PackageType = "Misc";
-        this->m_FileSize = 0;
         this->m_GameTitle = "Unknown";
-        this->m_ReplacementTitle = "None";
         this->m_PackageDescription = "No Description.";
+        this->m_FileHash = 0;
+        this->m_FileSize = 0;
     }
 
     CGamePackage(const char* path) {
@@ -35,7 +32,7 @@ public:
     }
 
     bool hasThumbnail(){
-        return !(m_ThumbnailPath == "" || m_ThumbnailPath == "dummy_thumbnail_path");
+        return !(m_ThumbnailPath == "");
     }
 
     std::string getPath(){
@@ -63,7 +60,11 @@ public:
     }
 
     bool getStatus(){
-        return this->isEnabled;
+        return this->m_IsEnabled;
+    }
+
+    void setEnabled(bool toggle){
+        this->m_IsEnabled = toggle;
     }
 
     std::string getAuthor(){
@@ -82,6 +83,14 @@ public:
         this->m_PackageDescription = description;
     }
 
+    long long getMD5(){
+        return this->m_FileHash;
+    }
+
+    float getFileVersion(){
+        return this->m_FileVersion;
+    }
+
 protected:
     std::string m_JsonPath;
     JSON m_ProfileJson;
@@ -97,8 +106,13 @@ private:
     std::string m_ReplacementTitle;
     std::string m_PackageDescription;
 
+
+    long long m_FileHash;
+    float m_FileVersion;
+    bool m_IsEnabled;
+
+
     unsigned int m_FileSize;
-    bool isEnabled = false; /* todo: make this protected or friend class variable*/
     int m_LoadIndex;
 
     void CollectJsonValues() {
@@ -106,7 +120,7 @@ private:
         this->m_PackageName = m_ProfileJson["Package Name"];
         this->m_ThumbnailPath = m_ProfileJson["Thumbnail Path"];
         this->m_AssetPath = m_ProfileJson["Asset Path"];
-        this->isEnabled = m_ProfileJson["Is Used"];
+        this->m_IsEnabled = m_ProfileJson["Is Used"];
         this->m_LoadIndex = m_ProfileJson["Load Index"];
 
     }
