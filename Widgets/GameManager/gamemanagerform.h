@@ -47,7 +47,7 @@ private:
     static constexpr float GRID_SCALE = 13;
     static constexpr float MIN_GRID_SCALE = 44;
     static constexpr float MAX_GRID_SCALE = 90;
-    static const int DEBUG_TOTAL_CARDS = 106;
+    static const int DEBUG_TOTAL_CARDS = 11;
 
     double m_CustomGridScale = 44;
     void GetManagerLayoutGeneral();

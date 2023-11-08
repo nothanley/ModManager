@@ -2,30 +2,20 @@
 #include "ui_mainwindow.h"
 #include "Widgets/BurgerMenu/burgermenu.h"
 #include "Widgets/GameManager/gamemanagerform.h"
-
+#include <QUrl>
+#include <QDesktopServices>
 #include <QGraphicsBlurEffect>
-
-void iterateWidgetsRecursively(QObject* widget) {
-
-    if (!widget) return;
-    for (int i = 0; i < widget->children().size(); ++i) {
-        QObject* childWidget = widget->children().at(i);
-        if (childWidget->isWidgetType()) {
-            QWidget* widget = static_cast<QWidget*>(childWidget);
-            widget->setGraphicsEffect({});
-            iterateWidgetsRecursively(childWidget);
-        }
-    }
-}
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    CreateBuildID();
+#ifdef DEV_BUILD
+    this->buildType = "DEV";
+#endif
 
+    CreateBuildID();
     ui->IconFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->BuildLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->leftAppFrame->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -49,11 +39,6 @@ MainWindow::CreateBuildID(){
             QString::number( SYS_VER_ ),
             QString::number( REVISION_ )
     };
-
-#ifdef DEV_BUILD
-    this->buildType = "DEV";
-#endif
-
     buildType = QStringList( { buildType,
                                "Build",
                                buildList.join(".") } ).join(" ");
@@ -135,9 +120,6 @@ MainWindow::CreateGameManager(const long long& gameHash){
    ui->BodyDummy->layout()->addWidget(pManagerForm);
 
 }
-
-#include <QUrl>
-#include <QDesktopServices>
 
 void MainWindow::on_githubButton_clicked()
 {

@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="WindowHandler/WindowHandler.qrc">
+    <normaloff>:/icons/logo_main_icon.ico</normaloff>:/icons/logo_main_icon.ico</iconset>
+  </property>
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
@@ -149,6 +153,13 @@ border: 0px solid grey;
            <width>68</width>
            <height>16000000</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI Variable Display Semib</family>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true"/>
@@ -735,8 +746,8 @@ QPushButton::hover{
   </widget>
  </widget>
  <resources>
-  <include location="WindowHandler/WindowHandler.qrc"/>
   <include location="Widgets/BurgerMenu/burgermenu.qrc"/>
+  <include location="WindowHandler/WindowHandler.qrc"/>
  </resources>
  <connections/>
 </ui>

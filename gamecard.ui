@@ -77,7 +77,6 @@
      <property name="styleSheet">
       <string notr="true">QPushButton{
 	color: white;
-	padding-top: 60px;
 	background-color: rgba(0, 0, 0, 0);
 }</string>
      </property>

@@ -48,7 +48,7 @@ QFrame{
       <property name="minimumSize">
        <size>
         <width>100</width>
-        <height>355</height>
+        <height>306</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -78,6 +78,18 @@ QFrame{
        </property>
        <item>
         <widget class="QLabel" name="PreviewLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="styleSheet">
           <string notr="true">QLabel{
 background-color: qlineargradient(spread: pad, 
@@ -101,7 +113,7 @@ background-color: qlineargradient(spread: pad,
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>138</height>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -247,7 +259,7 @@ QLabel{
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>220</height>
+        <height>250</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -289,34 +301,6 @@ QFrame{
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
-        <widget class="QFrame" name="frame">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 0, 0);
-border-radius: 9px;</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QTimeEdit" name="timeEdit"/>
-          </item>
-          <item>
-           <widget class="QTimeEdit" name="timeEdit_2"/>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="LoadOrderLabel">
          <property name="minimumSize">

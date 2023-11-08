@@ -34,6 +34,10 @@ public:
         CollectJsonValues();
     }
 
+    bool hasThumbnail(){
+        return !(m_ThumbnailPath == "" || m_ThumbnailPath == "dummy_thumbnail_path");
+    }
+
     std::string getPath(){
         return this->m_AssetPath;
     }

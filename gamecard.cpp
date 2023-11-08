@@ -111,7 +111,7 @@ void
 GameCard::drawBorderMask( QPixmap* background ){
     QPainter maskPainter(background);
     PixMapUtils::toggleTransparentPainter(&maskPainter);
-    m_SvgRenderer.render(&maskPainter);
+    m_SvgBorderMsk.render(&maskPainter);
 
     maskPainter.end();
     PixMapUtils::shaveAndStretchPixmap(background,1,1,1,1);
@@ -127,7 +127,7 @@ GameCard::drawHoverOverlay( QPixmap* background, const qreal opacity,
     QPixmap gradientMap = PixMapUtils::CreateGradientMap( size(),
                                           gradientX,
                                           gradientY,
-                                          &m_OverlaySvg  );
+                                          &m_SvgOutlineMsk  );
     // Apply painter
     maskPainter.setCompositionMode(QPainter::CompositionMode_Screen);
     maskPainter.setOpacity(opacity);
@@ -157,19 +157,48 @@ GameCard::drawVacantGraphics(){
     return pixmapGraphic;
 }
 
+void
+GameCard::drawStylizedTextToMap(QPainter* painter, const QString &text, const qreal opacity ){
+    QFont font("Segoe UI Variable Display", 7,11);
+    font.setBold(true);
+    painter->setFont(font);
+
+    // Overlay white text on qpixmap aligned to the center
+    painter->setCompositionMode(QPainter::CompositionMode_Screen);
+    painter->setOpacity(opacity);
+    painter->setPen(QColor(255,255,255,195));
+    painter->drawText(QRect(0, 0, width(),height()), Qt::AlignCenter, text.toUpper());
+
+    // reset opacity
+    painter->setOpacity(1.0);
+}
 
 QPixmap
 GameCard::drawCardGraphics(){
     // Initialize pixmap and painter
-    QPixmap PixmapToBeMasked(this->size());
-    QPainter backgroundPainter(&PixmapToBeMasked);
+    QPixmap pixmap(this->size());
+    QPainter backgroundPainter(&pixmap);
 
     // Draw card image and foreground effects
-    drawImageToPainter( &backgroundPainter,":/icons/card_bg_dummy.png" );
-    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
+    if ( this->pGameMod->hasThumbnail() )
+    {
+        drawImageToPainter( &backgroundPainter,":/icons/card_bg_dummy.png" );
+    }
+    else{
+        backgroundPainter.drawPixmap(0,0, PixMapUtils::CreateGradientMap( size(),
+                                                            QColor(60,60,80),
+                                                            QColor(70,70,80) ));
+        drawStylizedTextToMap(&backgroundPainter, pGameMod->getName().c_str() );
+    }
 
+
+    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
     backgroundPainter.end();
-    return PixmapToBeMasked;
+
+    // Draw Opaque borders around image
+    drawHoverOverlay(&pixmap,.45,
+                     QColor(10,10,10), QColor(180,180,200) );
+    return pixmap;
 }
 
 void

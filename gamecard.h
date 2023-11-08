@@ -38,11 +38,11 @@ Q_SIGNALS:
     void TableUpdate(CGamePackage* gameMod);
 
 private:
-    constexpr static const QColor PALLETE_GRAD_X = QColor(90,90,235);
-    constexpr static const QColor PALLETE_GRAD_Y = QColor(180,120,235);
-    constexpr static const double OVERLAY_WEIGHT = .2;
-    QSvgRenderer m_SvgRenderer = QSvgRenderer(QString(":/icons/card_mask.svg"));
-    QSvgRenderer m_OverlaySvg = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
+    constexpr static QColor PALLETE_GRAD_X = QColor(90,90,235);
+    constexpr static QColor PALLETE_GRAD_Y = QColor(180,120,235);
+    constexpr static double OVERLAY_WEIGHT = .2;
+    QSvgRenderer m_SvgBorderMsk = QSvgRenderer(QString(":/icons/card_mask.svg"));
+    QSvgRenderer m_SvgOutlineMsk = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
 
     /* Debug Constants */
     constexpr static bool DEBUG_CARDS = true;
@@ -61,6 +61,7 @@ private:
     QPixmap drawVacantGraphics();
     QPixmap drawCardGraphics();
 
+    void drawStylizedTextToMap(QPainter *painter, const QString& text, const qreal opacity=1.0 );
     void drawImageToPainter(QPainter* painter, const QString& imagePath, QSize *mapSize=nullptr );
     void drawImageOverlayToPainter(QPainter* painter, const QString& overlayPath, const float &opacity, QSize *mapSize=nullptr );
     void drawBorderMask( QPixmap* background );

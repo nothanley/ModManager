@@ -16,5 +16,6 @@
         <file>icons/card_add_overlay.svg</file>
         <file>icons/icon_github.png</file>
         <file>icons/icon_kofi.png</file>
+        <file>icons/ribbon_template.png</file>
     </qresource>
 </RCC>

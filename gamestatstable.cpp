@@ -43,6 +43,21 @@ void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
     table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
 }
 
+
+void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
+
+    QStringList headerLabels = { "Mod Version", "File MD5/SHA", "Set Enabled", "Extract Contents", "Edit Details" };
+    table->setRowCount( headerLabels.size() );
+    table->setColumnCount(1);
+    table->setVerticalHeaderLabels( headerLabels );
+
+    // Populate Items
+//    table->setItem( 0,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
+//    table->setItem( 1,0,new QTableWidgetItem( selectedMod->getAuthor().c_str() ) );
+//    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getType().c_str() ) );
+//    table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
+}
+
 void
 GameStatsTable::UpdateStatsTable(CGamePackage* selectedMod){
     if (!selectedMod){ return; }
@@ -50,6 +65,7 @@ GameStatsTable::UpdateStatsTable(CGamePackage* selectedMod){
 
     PopulateLeftTable(ui->leftTable,selectedMod);
     PopulateRightTable(ui->rightTable,selectedMod);
+    PopulatePropertyTable(ui->PropertyTable,selectedMod);
 }
 
 

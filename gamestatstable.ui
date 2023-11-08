@@ -154,7 +154,7 @@ QHeaderView::section {
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="rightTableNEw">
+    <widget class="QTableWidget" name="PropertyTable">
      <property name="font">
       <font>
        <pointsize>8</pointsize>
@@ -190,61 +190,6 @@ QHeaderView::section {
      <attribute name="verticalHeaderStretchLastSection">
       <bool>false</bool>
      </attribute>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>New Row</string>
-      </property>
-     </row>
-     <column>
-      <property name="text">
-       <string>New Column</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>New Column</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>New Column</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>New Column</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>New Column</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

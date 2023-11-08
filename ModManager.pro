@@ -44,6 +44,8 @@ RESOURCES += \
     Widgets/BurgerMenu/burgermenu.qrc \
     WindowHandler/WindowHandler.qrc
 
+win32:RC_ICONS += WindowHandler/icons/logo_main_icon.ico
+
 CONFIG+=c++2a
 DEFINES -= UNICODE
 DEFINES += _MBCS
