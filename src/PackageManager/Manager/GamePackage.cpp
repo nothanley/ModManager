@@ -17,6 +17,11 @@ CGamePackage::setDescription(const char* desc) {
     this->m_PackageDescription = desc;
 }
 
+void
+CGamePackage::setDate(const std::string& dateString){
+    this->m_CreationDate = dateString;
+}
+
 void 
 CGamePackage::setType(const char* type) {
     this->m_PackageType = type;
@@ -77,9 +82,19 @@ CGamePackage::setEnabled(bool toggle) {
     this->m_IsEnabled = toggle;
 }
 
+void
+CGamePackage::setReplacements(const char* replacements){
+    this->m_ReplacementTitle = replacements;
+}
+
 std::string 
 CGamePackage::getAuthor() {
     return this->m_AuthorName;
+}
+
+std::string
+CGamePackage::getDate() {
+    return this->m_CreationDate;
 }
 
 std::string 

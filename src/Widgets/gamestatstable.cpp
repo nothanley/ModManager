@@ -17,17 +17,17 @@ GameStatsTable::~GameStatsTable()
 }
 
 void PopulateRightTable(QTableWidget* table,CGamePackage* selectedMod){
-
-    QStringList headerLabels = { "File Size(kb)", "Mod Index", "Mod Game", "Replaces" };
+    QStringList headerLabels = { "File Size(kb)", "Mod Index", "File Name", "Replaces" };
     table->setRowCount( headerLabels.size() );
     table->setColumnCount(1);
     table->setVerticalHeaderLabels( headerLabels );
 
     // Populate Items
+    QString fileName = QString::fromStdString(selectedMod->getPath()).split("/").last();
     table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getSize() )));
     table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getIndex() )));
-    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
-    table->setItem( 4,0,new QTableWidgetItem( selectedMod->getReplaceAssetName().c_str() ));
+    table->setItem( 2,0,new QTableWidgetItem(  fileName ));
+    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getReplaceAssetName().c_str() ));
 }
 
 void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
@@ -40,6 +40,7 @@ void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
     // Populate Items
     table->setItem( 0,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
     table->setItem( 1,0,new QTableWidgetItem( selectedMod->getAuthor().c_str() ) );
+    table->setItem( 2,0,new QTableWidgetItem( selectedMod->getDate().c_str() ) );
     table->setItem( 3,0,new QTableWidgetItem( selectedMod->getType().c_str() ) );
     table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
 }

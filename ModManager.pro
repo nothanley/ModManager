@@ -11,6 +11,7 @@ SOURCES += src/main.cpp\
     src/PackageManager/Manager/GamePackage.cpp \
     src/PackageManager/Manager/GameProfile.cpp \
     src/PackageManager/Manager/ManagerController.cpp \
+    src/Widgets/additemdialog.cpp \
     src/Widgets/burgermenu.cpp \
     src/Widgets/gamemanagerform.cpp \
     src/Widgets/gamecard.cpp \
@@ -26,6 +27,7 @@ HEADERS  += \
     src/PackageManager/Manager/GamePackage.h \
     src/PackageManager/Manager/GameProfile.h \
     src/PackageManager/Manager/ManagerController.h \
+    src/Widgets/additemdialog.h \
     src/Widgets/burgermenu.h \
     src/Widgets/gamemanagerform.h \
     src/Widgets/gamecard.h \
@@ -42,6 +44,7 @@ LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
         -lgdi32
 
 FORMS += \
+    src/Widgets/additemdialog.ui \
     src/Widgets/gamemanagerform.ui \
     src/Widgets/gamecard.ui \
     src/Widgets/gamestatstable.ui \

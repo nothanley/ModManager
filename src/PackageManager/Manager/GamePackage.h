@@ -30,6 +30,8 @@ public:
     void setDescription(const char* desc);
     void setType(const char* type);
     void setAuthorName(const char* name);
+    void setReplacements(const char* replacements);
+    void setDate(const std::string &dateString);
     void addCreationDate();
     void setEnabled(bool toggle);
     bool hasThumbnail();
@@ -44,6 +46,7 @@ public:
     std::string getName();
     std::string getType();
     std::string getDescription();
+    std::string getDate();
 
 protected:
     std::string m_JsonPath;

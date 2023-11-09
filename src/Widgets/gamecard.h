@@ -7,6 +7,8 @@
 
 class CGamePackage;
 class QSvgRenderer;
+class AddItemDialog;
+class GameManagerForm;
 
 namespace Ui {
 class GameCard;
@@ -17,7 +19,9 @@ class GameCard : public QWidget
     Q_OBJECT
 
 public:
-    explicit GameCard(QWidget *parent = nullptr, CGamePackage* gameMod = nullptr);
+    explicit GameCard(QWidget*parent = nullptr,
+                      CGamePackage* gameMod = nullptr,
+                      GameManagerForm* parentForm=nullptr);
     ~GameCard();
 
     void decorate();
@@ -30,9 +34,11 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool event(QEvent * e) override;
+    void createAddItemDialog();
 
 private slots:
     void on_GameCardButton_clicked();
+    void addDialogClosed();
 
 Q_SIGNALS:
     void TableUpdate(CGamePackage* gameMod);
@@ -48,6 +54,7 @@ private:
     constexpr static bool DEBUG_CARDS = true;
     const QString DBG_TEMPLATE_DIR = "C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates";
 
+    void mousePress(QEvent* event);
     void hoverEnter(QHoverEvent * event);
     void hoverLeave(QHoverEvent * event);
     void hoverMove(QHoverEvent * event);
@@ -68,7 +75,9 @@ private:
     void drawHoverOverlay( QPixmap* background, const qreal opacity=1.0,
                             const QColor& gradientX=PALLETE_GRAD_X, const QColor& gradientY=PALLETE_GRAD_Y );
 
+    GameManagerForm* pParentForm = nullptr;
     CGamePackage* pGameMod = nullptr;
+    AddItemDialog* pItemDialog = nullptr;
     Ui::GameCard *ui;
 };
 

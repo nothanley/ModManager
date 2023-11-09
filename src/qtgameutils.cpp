@@ -1,4 +1,24 @@
 #include "qtgameutils.hpp"
+#include <QDateTime>
+#include <QStandardPaths>
+#include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
+#include <QDir>
+#include <QRandomGenerator>
+#include <QImage>
+
+QString
+QTGameUtils::getCurrentDate() {
+    // Get the current date and time
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+
+    // Format the date in "YYYY-MM-DD" format
+    QString formattedDate = currentDateTime.toString("yyyy-MM-dd");
+
+    return formattedDate;
+}
 
 bool
 QTGameUtils::FileExistsOnDisk(const QString &filePath) {
@@ -70,11 +90,6 @@ QTGameUtils::SetupManagerConfig(const QString& roamingPath){
     SetupGameConfig("WWE 2K23");
     SetupGameConfig("WWE 2K22");
 }
-
-
-#include <QDir>
-#include <QRandomGenerator>
-#include <QImage>
 
 
 QString

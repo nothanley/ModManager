@@ -32,11 +32,11 @@ public:
     long long m_GameHash;
     explicit GameManagerForm(const long long& gameHash, QWidget *parent = nullptr);
     ~GameManagerForm();
-    void
-    PopulateCardGrid(QGridLayout *gridWidget);
+    void PopulateCardGrid();
 
 public Q_SLOTS:
     void PopulatePreviewPanel(CGamePackage* selectedMod);
+    void AddCardToLayout(CGamePackage* gameItem);
 
 private slots:
     void on_HomeLabel_clicked();

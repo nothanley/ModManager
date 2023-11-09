@@ -6,13 +6,15 @@
 #include <QHoverEvent>
 #include <QGraphicsDropShadowEffect>
 #include <QDebug>
+#include "additemdialog.h"
+#include "gamemanagerform.h"
 
-GameCard::GameCard(QWidget *parent, CGamePackage* gameMod) :
+GameCard::GameCard(QWidget *parent, CGamePackage* gameMod, GameManagerForm* form) :
     QWidget(parent),
     ui(new Ui::GameCard)
 {
     ui->setupUi(this);
-
+    this->pParentForm = form;
     this->setMouseTracking(true);
     this->pGameMod = gameMod;
     this->setAttribute(Qt::WA_Hover, true);
@@ -21,6 +23,7 @@ GameCard::GameCard(QWidget *parent, CGamePackage* gameMod) :
 GameCard::~GameCard()
 {
     delete this->pLabelGraphic;
+    delete this->pItemDialog;
     delete ui;
 }
 
@@ -38,6 +41,26 @@ GameCard::hoverEnter(QHoverEvent * event) {
 }
 
 void
+GameCard::addDialogClosed(){
+    this->pItemDialog = nullptr;
+}
+
+void
+GameCard::createAddItemDialog() {
+    if (this->pItemDialog != nullptr){ pItemDialog->show(); return; }
+    if (this->pParentForm == nullptr){ return; }
+    pItemDialog = new AddItemDialog();
+    pItemDialog->show();
+
+    QObject::connect(pItemDialog, &AddItemDialog::sendItem, /* Connect SEND signals in mainlayout & dialogue */
+                     this->pParentForm,
+                     &GameManagerForm::AddCardToLayout );
+
+    QObject::connect(pItemDialog, &AddItemDialog::interfaceClose,
+                     this, &GameCard::addDialogClosed); /* Connect close signals in this & child dialog */
+}
+
+void
 GameCard::hoverLeave(QHoverEvent * event) {
     this->m_IsUserHovering = false;
     this->m_IsHoverDecorated = false;
@@ -46,6 +69,7 @@ GameCard::hoverLeave(QHoverEvent * event) {
     delete this->pLabelGraphic;
     this->pLabelGraphic = nullptr;
 }
+
 
 void
 GameCard::hoverMove(QHoverEvent * event) {/*todo*/}
@@ -234,7 +258,24 @@ GameCard::paintEvent(QPaintEvent *event){
 
 void GameCard::on_GameCardButton_clicked()
 {
-    if ( this->isEmptyCard() ) return;
+    if ( this->isEmptyCard() ){
+        createAddItemDialog();
+        return;}
+
     TableUpdate(this->pGameMod);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
