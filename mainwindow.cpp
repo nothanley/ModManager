@@ -114,7 +114,7 @@ void
 MainWindow::CreateGameManager(const long long& gameHash){
     //todos: initialize CGameController to handle game types.
     // GameManagerForm should perform this init and could be subclassed for game types
-    this->pManagerForm     = new GameManagerForm(gameHash,this);
+    this->pManagerForm = new GameManagerForm(gameHash,this);
     if (!pManagerForm->isEnabled()){ return; }
 
    ui->BodyDummy->layout()->addWidget(pManagerForm);

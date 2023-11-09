@@ -26,7 +26,7 @@ void PopulateRightTable(QTableWidget* table,CGamePackage* selectedMod){
     // Populate Items
     table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getSize() )));
     table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getIndex() )));
-    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getGameName().c_str() ) );
+    table->setItem( 3,0,new QTableWidgetItem( selectedMod->getName().c_str() ) );
     table->setItem( 4,0,new QTableWidgetItem( selectedMod->getReplaceAssetName().c_str() ));
 }
 

@@ -32,8 +32,8 @@ GameManagerForm::~GameManagerForm()
 void AddDebugPackages(CGameManager* manager, int numPlaceholders){
     for (int i = 0; i < numPlaceholders; i++){
         std::string modTitle = "PlaceHolder_Mod " + std::to_string(i);
-        CGamePackage* placeholderMod = new CGamePackage(modTitle.c_str(),-1);
-        manager->getActiveProfile()->addModPackage(placeholderMod);
+        CGamePackage* placeholderMod = new CGamePackage(modTitle.c_str(),"Misc","No Path");
+        manager->getActiveProfile()->addToRegistry(placeholderMod);
     }
 }
 
@@ -54,13 +54,12 @@ void
 GameManagerForm::PopulateManagerGUI(){
     switch(m_GameHash){
         case GAME_WWE_23:
-            pGameManager = m_CTRLManager->GetGameManager("WWE 2K23");
-            /* Debug Populate empty profile. Alter after GUI build. */
-            if (!pGameManager->hasActiveProfile()){
-                pGameManager->addNewProfile("Default",true);
+            pGameManager = m_CTRLManager->getManager("WWE 2K23");
+            #ifdef DEBUG_MODE_ENABLED
+                /* Debug Populate empty profile. Alter after GUI build. */
+                pGameManager->createProfile("Default",true);
                 AddDebugPackages(this->pGameManager,DEBUG_TOTAL_CARDS);
-            }
-
+            #endif
             GetManagerLayoutGeneral();
             break;
         case GAME_WWE_22:
@@ -76,9 +75,9 @@ GameManagerForm::InitializeManagerSettings(){
     SetupManagerConfig(roamingPath);
 
     this->m_CTRLManager = new CManagerController( roamingPath.toStdString().c_str() );
-    if (m_CTRLManager->m_NumGames == 0){
+    if (m_CTRLManager->getGameCount() == 0){
         qDebug() << "No Games Loaded.";
-        Q_ASSERT(m_CTRLManager->m_NumGames == 0);
+        Q_ASSERT(m_CTRLManager->getGameCount() == 0);
         return; }
 
     qDebug() << "Loaded User Config: " << roamingPath;
@@ -95,7 +94,7 @@ void
 GameManagerForm::RefreshGameStats(){
     ui->GameLabel->setText( pGameManager->getGameName().c_str() );
     ui->ModCountLabel->setText( QString::number( pGameManager->getActiveProfile()->getModCount() ) + " MODS" );
-    ui->ProfileLabel->setText( "PROFILE: " + QString::fromStdString( pGameManager->getActiveProfile()->getProfileName() ) ) ;
+    ui->ProfileLabel->setText( "PROFILE: " + QString::fromStdString( pGameManager->getActiveProfile()->getName() ) ) ;
     ui->CountLabel2->setText( QString::number( pGameManager->getProfileCount() ) + " PROFILES" ) ;
 }
 
