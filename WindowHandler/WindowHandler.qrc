@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>icons/minimize.png</file>
-        <file>icons/plus.png</file>
-        <file>icons/plus_checked.png</file>
-        <file>icons/x.png</file>
-    </qresource>
-</RCC>
