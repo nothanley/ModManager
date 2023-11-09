@@ -1,6 +1,5 @@
 #ifndef GAMEMANAGERFORM_H
 #define GAMEMANAGERFORM_H
-#include "PackageManager/Manager/ManagerController.h"
 #include <QWidget>
 #include <QTableView>
 #include <QGridLayout>
@@ -17,6 +16,9 @@ enum{
 class GameCard;
 class GameStatsTable;
 class PreviewPanel;
+class CGamePackage;
+class CManagerController;
+class CGameManager;
 
 namespace Ui {
 class GameManagerForm;

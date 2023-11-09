@@ -6,6 +6,7 @@
 #include "previewpanel.h"
 #include <QDebug>
 #include <QLayout>
+#include "PackageManager/Manager/ManagerController.h"
 using namespace QTGameUtils;
 
 GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :

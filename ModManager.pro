@@ -7,6 +7,10 @@ TARGET = ModManager
 TEMPLATE = app
 
 SOURCES += main.cpp\
+    PackageManager/Manager/GameManager.cpp \
+    PackageManager/Manager/GamePackage.cpp \
+    PackageManager/Manager/GameProfile.cpp \
+    PackageManager/Manager/ManagerController.cpp \
     Widgets/BurgerMenu/burgermenu.cpp \
     Widgets/GameManager/gamemanagerform.cpp \
     WindowHandler/qwinwidget.cpp \
@@ -18,6 +22,10 @@ SOURCES += main.cpp\
     qtgameutils.cpp
 
 HEADERS  += \
+    PackageManager/Manager/GameManager.h \
+    PackageManager/Manager/GamePackage.h \
+    PackageManager/Manager/GameProfile.h \
+    PackageManager/Manager/ManagerController.h \
     Widgets/BurgerMenu/burgermenu.h \
     Widgets/GameManager/gamemanagerform.h \
     WindowHandler/qwinwidget.h \
