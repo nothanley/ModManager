@@ -9,7 +9,6 @@ using namespace ConfigUtils;
 class CManagerController {
 
 public:
-    int m_NumGames = 0;
     ~CManagerController() {
         for (auto game:this->pGameManagers)
             delete game;
@@ -20,15 +19,36 @@ public:
         if (!DebugUtils::DirectoryExists(this->m_RootPath)) { return;  }
 
         InitializeManagers();
-        if (this->m_NumGames < 0) { SetupController(); }
     }
 
-    CGameManager* GetGameManager(const char* gameTitle){
+    CGameManager* getManager(const char* gameTitle){
         for (const auto& manager : this->pGameManagers ){
             if (manager->getGameName() == gameTitle)
                 return manager;
         }
         return nullptr;
+    }
+
+    int getGameCount() {
+        return this->pGameManagers.size();
+    }
+
+    void addManager(CGameManager* manager) {
+        this->pGameManagers.push_back(manager);
+    }
+
+
+    CGameManager* createManager(const char* gameName) {
+        if (isExistingManager(gameName)) { return getManager(gameName); }
+        CGameManager* manager = new CGameManager();
+        std::string managerPath = (m_RootPath + "/Games/" + gameName);
+
+        manager->setJsonPath( managerPath.c_str() );
+        manager->setGameName(gameName);
+        manager->createProfile( "Default", true );
+
+        addManager(manager);
+        return manager;
     }
 
 protected:
@@ -37,22 +57,29 @@ protected:
 private:
     std::vector<CGameManager*> pGameManagers;
 
+    bool isExistingManager( std::string name) {
+        for (const auto& manager : this->pGameManagers)
+            if (toUpper(name) == toUpper(manager->getGameName()))
+                return true;
+
+        return false;
+    }
+
     void InitializeManagers() {
 
         // Setup JSON template
-        std::string configPath = m_RootPath + "\\Games";
+        std::string configPath = m_RootPath + "/Games";
         std::vector<std::string> jsonPaths = FindExistingConfigs(configPath.c_str(),"game_config.json");
-
-        this->m_NumGames = jsonPaths.size();
-//        std::cout << "\nNumber of Titles: " << this->m_NumGames; /* Debug output */
 
         /* Initialize valid game managers with specified jsons */
         for (const auto& path : jsonPaths) {
-            CGameManager* gameManager = new CGameManager( path.c_str() );
-            this->pGameManagers.push_back(gameManager);
+            try
+            {
+                CGameManager* gameManager = new CGameManager(path.c_str());
+                this->pGameManagers.push_back(gameManager);
+            }
+            catch (...) { std::cout << "invalid json"; }
         }
 
     }
-
-    void SetupController() {}
 };

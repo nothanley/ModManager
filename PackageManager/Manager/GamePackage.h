@@ -7,28 +7,46 @@ class CGamePackage {
 
 public:
 
-    CGamePackage( const char* packageName, int index ){
-        this->m_PackageName = packageName;
-        this->m_IsEnabled = false;
-        this->m_LoadIndex = index;
-        this->m_AuthorName = "Unknown";
-        this->m_CreationDate = "Unknown";
-        this->m_PackageType = "Misc";
-        this->m_GameTitle = "Unknown";
-        this->m_PackageDescription = "No Description.";
-        this->m_FileHash = 0;
-        this->m_FileSize = 0;
+    CGamePackage( const char* name, const char* type, const char* assetPath ){
+        setAssetPath(assetPath);
+        setName(name);
+        setAuthorName("N/A");
+        addCreationDate();
+        setType(type);
+        setDescription("No Description.");
     }
 
     CGamePackage(const char* path) {
         this->m_JsonPath = path;
         bool canAccessFile = isFileAccessable(this->m_JsonPath);
-        if (!canAccessFile) { 
-            /* Perform first time setup on config */
-            std::cout << "\nCannot access mod package.";
-            return; }
 
-        CollectJsonValues();
+        try { CollectJsonValues();}
+        catch (...) {
+            throw std::runtime_error("Invalid Mod Configuration."); }
+    }
+
+    void setAssetPath(const std::string& assetPath) {
+        this->m_AssetPath = assetPath;
+    }
+
+    void setName(const char* name) {
+        this->m_PackageName = name;
+    }
+
+    void setDescription(const char* desc) {
+        this->m_PackageDescription = desc;
+    }
+
+    void setType(const char* type) {
+        this->m_PackageType = type;
+    }
+
+    void setAuthorName(const char* name) {
+        this->m_AuthorName = name;
+    }
+
+    void addCreationDate() {
+        this->m_CreationDate = "MM/DD/YY";
     }
 
     bool hasThumbnail(){
@@ -71,16 +89,8 @@ public:
         return this->m_AuthorName;
     }
 
-    std::string getGameName(){
-        return this->m_GameTitle;
-    }
-
     std::string getReplaceAssetName(){
         return this->m_ReplacementTitle;
-    }
-
-    void setDescription(const char* description){
-        this->m_PackageDescription = description;
     }
 
     long long getMD5(){
@@ -95,6 +105,10 @@ protected:
     std::string m_JsonPath;
     JSON m_ProfileJson;
 
+    //void saveToJson(JSON* json, const std::string& profile) {
+    //    json->at(profile)[this->getName()]["path"] = this->getPath();
+    //}
+
 private:
     std::string m_CreationDate;
     std::string m_PackageName;
@@ -102,27 +116,31 @@ private:
     std::string m_ThumbnailPath;
     std::string m_AssetPath;
     std::string m_AuthorName;
-    std::string m_GameTitle;
     std::string m_ReplacementTitle;
     std::string m_PackageDescription;
+    std::string m_AuthorLink;
 
-
-    long long m_FileHash;
-    float m_FileVersion;
-    bool m_IsEnabled;
-
-
-    unsigned int m_FileSize;
-    int m_LoadIndex;
+    long long m_FileHash = 0;
+    float m_FileVersion= 0;
+    bool m_IsEnabled = true;
+    unsigned int m_FileSize = 0;
+    int m_LoadIndex = 0;
 
     void CollectJsonValues() {
-
-        this->m_PackageName = m_ProfileJson["Package Name"];
-        this->m_ThumbnailPath = m_ProfileJson["Thumbnail Path"];
-        this->m_AssetPath = m_ProfileJson["Asset Path"];
-        this->m_IsEnabled = m_ProfileJson["Is Used"];
-        this->m_LoadIndex = m_ProfileJson["Load Index"];
-
+        //this->m_PackageName = m_ProfileJson["asset_name"];
+        //this->m_AssetPath = m_ProfileJson["asset_path"];
+        //this->m_PackageType = m_ProfileJson["asset_type"];
+        //this->m_FileVersion = m_ProfileJson["asset_version"];
+        //this->m_FileHash = m_ProfileJson["asset_md5"];
+        //this->m_ThumbnailPath = m_ProfileJson["thumbnail_path"];
+        //this->m_AuthorName = m_ProfileJson["author_name"];
+        //this->m_ReplacementTitle = m_ProfileJson["replace_name"];
+        //this->m_PackageDescription = m_ProfileJson["description"];
+        //this->m_CreationDate = m_ProfileJson["creation_date"];
+        //this->m_AuthorLink = m_ProfileJson["author_link"];
     }
 
 };
+
+
+
