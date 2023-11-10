@@ -345,23 +345,31 @@ GameManagerForm::addZippedMod(const QString& path){
 void
 GameManagerForm::dropEvent(QDropEvent *event){
 
-    QUrl link = event->mimeData()->urls().last();
-    QString dragText = link.toLocalFile();
+    QList<QUrl> links = event->mimeData()->urls();
 
-    if (dragText.toLower().endsWith(".zip") ){
-        addZippedMod(dragText);
+    for (const auto& link : links){
+        QString item = link.toLocalFile();
+
+        if (item.toLower().endsWith(".zip") ){
+            addZippedMod(item); }
     }
-
 }
 
 void
 GameManagerForm::dragEnterEvent(QDragEnterEvent *event)
 {
-   QUrl link = event->mimeData()->urls().last();
-   QString dragText = link.toLocalFile();
+    QList<QUrl> links = event->mimeData()->urls();
 
-   if ( dragText.toLower().endsWith(".cak") ||
-        dragText.toLower().endsWith(".zip") )
+    bool isValidBatch = false;
+    for (const auto& link : links)
+    {
+        QString dragText = link.toLocalFile();
+        isValidBatch = dragText.toLower().endsWith(".cak") ||
+                       dragText.toLower().endsWith(".zip");
+        if (!isValidBatch) break;
+    }
+
+   if ( isValidBatch )
        event->acceptProposedAction();
 }
 
