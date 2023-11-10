@@ -111,8 +111,10 @@ GameCard::decorate(){
 
 void
 GameCard::drawImageToPainter( QPainter* painter, const QString& imagePath, QSize* mapSize ){
-    QImage image = !DEBUG_CARDS ? QImage(imagePath)
-                                        : QImage( QTGameUtils::getRandomFilePath( DBG_TEMPLATE_DIR ) );
+    QImage image =  QImage(imagePath);
+
+    if (DEBUG_CARDS)
+        image = QImage( QTGameUtils::getRandomFilePath( DBG_TEMPLATE_DIR ) );
     QSize targetSize = (mapSize != nullptr) ? *mapSize : this->size();
     painter->drawImage( QRect(QPoint(0,0), targetSize ), image.scaled(targetSize) );
 }
@@ -176,6 +178,7 @@ GameCard::drawVacantGraphics(){
                      /* Overlay Weight */ (this->m_IsUserHovering) ? 2 : 1 );
 
     // Draw highlight borders
+    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
     backgroundPainter.end();
     drawHoverOverlay(&pixmapGraphic,1,QColor(10,10,10), QColor(95,95,95));
     return pixmapGraphic;
@@ -206,7 +209,7 @@ GameCard::drawCardGraphics(){
     // Draw card image and foreground effects
     if ( this->pGameMod->hasThumbnail() )
     {
-        drawImageToPainter( &backgroundPainter,":/icons/card_bg_dummy.png" );
+        drawImageToPainter( &backgroundPainter, pGameMod->getThumbnailPath().c_str() );
     }
     else{
         backgroundPainter.drawPixmap(0,0, PixMapUtils::CreateGradientMap( size(),
@@ -216,7 +219,7 @@ GameCard::drawCardGraphics(){
     }
 
 
-//    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
+    drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
     backgroundPainter.end();
 
     // Draw Opaque borders around image
@@ -256,7 +259,9 @@ GameCard::paintEvent(QPaintEvent *event){
 
 
 
-void GameCard::on_GameCardButton_clicked()
+void GameCard::on_GameCardButton_clicked(){}
+
+void GameCard::on_GameCardButton_released()
 {
     if ( this->isEmptyCard() ){
         createAddItemDialog();
@@ -264,18 +269,4 @@ void GameCard::on_GameCardButton_clicked()
 
     TableUpdate(this->pGameMod);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

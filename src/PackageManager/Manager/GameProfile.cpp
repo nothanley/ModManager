@@ -66,7 +66,7 @@ JSON
 CGameProfile::saveModRegistryToJson(JSON json) {
     json[m_ProfileName]["mod_registry"] = this->getAllModNames();
     for (const auto& mod : this->m_PackageLoadOrder) {
-        json[m_ProfileName][mod->getName()]["path"] = mod->getPath();
+        json[m_ProfileName][mod->getName()]["path"] = mod->getJsonPath();
         json[m_ProfileName][mod->getName()]["status"] = mod->getStatus();
         json[m_ProfileName][mod->getName()]["load_index"] = getIndex(mod->getName());
     }

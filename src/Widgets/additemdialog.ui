@@ -98,7 +98,7 @@ QTextEdit{
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="src/WindowHandler/WindowHandler.qrc">:/icons/logo_main_icon.ico</pixmap>
+         <pixmap resource="../WindowHandler/WindowHandler.qrc">:/icons/logo_main_icon.ico</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -936,7 +936,7 @@ background-color: rgb(0, 0, 0);</string>
   </layout>
  </widget>
  <resources>
-  <include location="src/WindowHandler/WindowHandler.qrc"/>
+  <include location="../WindowHandler/WindowHandler.qrc"/>
  </resources>
  <connections/>
 </ui>

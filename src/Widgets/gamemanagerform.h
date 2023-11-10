@@ -29,10 +29,12 @@ class GameManagerForm : public QWidget
     Q_OBJECT
 
 public:
-    long long m_GameHash;
     explicit GameManagerForm(const long long& gameHash, QWidget *parent = nullptr);
     ~GameManagerForm();
     void PopulateCardGrid();
+
+    long long m_GameHash;
+    std::string m_GameTitle;
 
 public Q_SLOTS:
     void PopulatePreviewPanel(CGamePackage* selectedMod);
@@ -45,9 +47,10 @@ private slots:
 
 protected:
     void ClearGrid();
-    void ResetLayout();
+    void ResetLayout(); /* Clears existing UI elements */
     void RefreshGameStats();
     void RefreshRibbonStats();
+    void RefreshAll(); /* Repopulates tables and grids */
 
 private:
     static const int CARD_WIDTH = 30 * 10;
@@ -63,6 +66,7 @@ private:
     void PopulateManagerGUI();
     void InitializeStatsTable();
     void InitializePreviewPanel();
+    bool ValidateManager(const char* gameName, const bool override=true);
 
 
     GameStatsTable* pStatsTable = nullptr;

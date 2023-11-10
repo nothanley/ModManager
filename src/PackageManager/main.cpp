@@ -9,7 +9,7 @@ int main()
 {
     
     /* Debug by inputting a relative json path */
-    //CManagerController managerControllerDebug("C:/Users/wauke/AppData/Roaming/ModManager");
+    CManagerController managerControllerDebug("C:/Users/wauke/AppData/Roaming/ModManager");
 
     //managerControllerDebug.createManager("WWE 2K23");
     //CGameManager* manager = managerControllerDebug.getManager("WWE 2K23");

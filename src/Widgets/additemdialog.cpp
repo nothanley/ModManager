@@ -11,11 +11,11 @@ AddItemDialog::AddItemDialog(QWidget *parent) :
     ui(new Ui::AddItemDialog)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 AddItemDialog::~AddItemDialog()
 {
-    qDebug() << "Bye.";
     emit interfaceClose();
     delete ui;
 }
@@ -113,12 +113,11 @@ AddItemDialog::CreatePackageFromInterface(){
     CGamePackage* gameItem = new CGamePackage(modName.toStdString().c_str(),
                                               modType.toStdString().c_str(),
                                               modPath.toStdString().c_str());
-    gameItem->setDate( QTGameUtils::getCurrentDate().toStdString() );
-    gameItem->setDescription(
-                ui->descBox->toPlainText().toStdString().c_str() );
     gameItem->setEnabled(true);
-    gameItem->setReplacements(
-                ui->replaceBox->text().toStdString().c_str() );
+    gameItem->setDate( QTGameUtils::getCurrentDate().toStdString() );
+    gameItem->setDescription(    ui->descBox->toPlainText().toStdString().c_str() );
+    gameItem->setReplacements(   ui->replaceBox->text().toStdString().c_str()     );
+    gameItem->setThumbnailPath(  ui->thumbnailBox->text().toStdString().c_str()   );
     return gameItem;
 }
 

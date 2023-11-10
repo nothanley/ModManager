@@ -9,6 +9,7 @@ GameStatsTable::GameStatsTable(QWidget *parent) :
     ui(new Ui::GameStatsTable)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 GameStatsTable::~GameStatsTable()
@@ -77,7 +78,6 @@ void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
 void
 GameStatsTable::UpdateStatsTable(CGamePackage* selectedMod){
     if (!selectedMod){ return; }
-    qDebug() << "Mod Selected: " << QString::fromStdString(selectedMod->getName());
 
     PopulateLeftTable(ui->leftTable,selectedMod);
     PopulateRightTable(ui->rightTable,selectedMod);

@@ -85,4 +85,58 @@ namespace ConfigUtils {
         return GetAllDirectoryJSONs(directory, configName);
     }
 
+    static
+    std::string extractFileName(const std::string& filepath) {
+        size_t found = filepath.find_last_of("/\\");
+
+        if (found != std::string::npos) {
+            return filepath.substr(found + 1);
+        } else {
+            return filepath;
+        }
+    }
+
+    static
+    std::string extractFolderPath(const std::string& filepath) {
+        size_t found = filepath.find_last_of("/\\");
+
+        if (found != std::string::npos) {
+            return filepath.substr(0, found + 1);
+        } else {
+            return "";
+        }
+    }
+
+    static
+    bool copyFile(const std::string& oldPath, const std::string& newPath) {
+        std::ifstream sourceFile(oldPath, std::ios::binary);
+        std::ofstream destinationFile(newPath, std::ios::binary);
+        if (!sourceFile.is_open() || !destinationFile.is_open())
+            return false;
+
+        /* Copy binary contents*/
+        destinationFile << sourceFile.rdbuf();
+
+        /* Validate successful copy */
+        if (sourceFile.fail() || destinationFile.fail())
+            return false;
+        sourceFile.close();
+        destinationFile.close();
+        return true;
+    }
+
+    static
+    std::string unifySlashEncoding(const std::string& filePath) {
+        std::string fixedPath = filePath;
+
+        // Replace backslashes with forward slashes
+        size_t found = fixedPath.find("\\");
+        while (found != std::string::npos) {
+            fixedPath.replace(found, 1, "/");
+            found = fixedPath.find("\\", found + 1);
+        }
+
+        return fixedPath;
+    }
+
 };

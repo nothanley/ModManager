@@ -4,7 +4,7 @@
 namespace QTGameUtils{
 
     bool FileExistsOnDisk(const QString &filePath);
-    bool CreateRoamingDirectory(const QString &directoryPath);
+    bool CreateUserDirectory(const QString &directoryPath);
     QString getCurrentDate();
     QString GetUserRoamingPath(const QString& gameTitle="");
     void CreateGameJSON(const QString& gamePath, bool* isReadyFile);

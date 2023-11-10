@@ -55,25 +55,27 @@ void
 GameManagerForm::PopulateManagerGUI(){
     switch(m_GameHash){
         case GAME_WWE_23:
-            pGameManager = m_CTRLManager->getManager("WWE 2K23");
-            #ifdef DEBUG_MODE_ENABLED
-                /* Debug Populate empty profile. Alter after GUI build. */
-                pGameManager->createProfile("Default",true);
-                AddDebugPackages(this->pGameManager,DEBUG_TOTAL_CARDS);
-            #endif
-            GetManagerLayoutGeneral();
+            this->m_GameTitle = "WWE 2K23";
             break;
         case GAME_WWE_22:
             break;
         default:
             break;
     }
+
+    if (this->m_GameTitle == ""){ return; }
+    pGameManager = m_CTRLManager->getManager(m_GameTitle.c_str());
+    #ifdef DEBUG_MODE
+        /* Debug Populate empty profile. Alter after GUI build. */
+        pGameManager->createProfile("Default",true);
+        AddDebugPackages(this->pGameManager,DEBUG_TOTAL_CARDS);
+    #endif
+    GetManagerLayoutGeneral();
 }
 
 void
 GameManagerForm::InitializeManagerSettings(){
     QString roamingPath = GetUserRoamingPath();
-    SetupManagerConfig(roamingPath);
 
     this->m_CTRLManager = new CManagerController( roamingPath.toStdString().c_str() );
     if (m_CTRLManager->getGameCount() == 0){
@@ -101,10 +103,8 @@ GameManagerForm::RefreshGameStats(){
 
 void
 GameManagerForm::RefreshRibbonStats(){
-    int numCharacters = 0,
-        numArenas = 0,
-        numMovies = 0,
-        numMiscMods= 0;
+    int numCharacters = 0, numArenas = 0,
+        numMovies = 0, numMiscMods= 0;
 
     for (const auto& gameMod : this->pGameManager->getActiveProfile()->getAllMods() )
         switch( qHash( gameMod->getType().c_str() ) ){
@@ -127,23 +127,30 @@ GameManagerForm::RefreshRibbonStats(){
     ui->MiscLabel->setText("Misc Installed: " + QString::number(numMiscMods));
 }
 
+bool
+GameManagerForm::ValidateManager(const char* gameName, const bool override)
+{
+    /* Creates a new manager if one doesn't exist. Returns false if setup fails. */
+    if ( this->pGameManager && !override ){ return true; }
+
+    this->m_CTRLManager->createManager(gameName);
+    pGameManager = this->m_CTRLManager->getManager(gameName);
+    return (this->pGameManager != nullptr);
+}
+
 void
-GameManagerForm::GetManagerLayoutGeneral(){
-    if (!this->pGameManager || !this->pGameManager->hasActiveProfile()){
-        Q_ASSERT( this->pGameManager || !this->pGameManager->hasActiveProfile() );
-        qDebug() << "Could not load layout. Invalid Manager";    }
+GameManagerForm::GetManagerLayoutGeneral()
+{
+    if (!this->ValidateManager(m_GameTitle.c_str())){
+        qDebug() << "Could not load or create configuration.";
+        return;   }
 
-
+    this->pGameManager->save();
     this->setEnabled(true);
     ui->setupUi(this);
 
-    RefreshGameStats();
-    InitializeStatsTable();
-    InitializePreviewPanel();
-
+    RefreshAll();
     ui->GameCardGrid->layout()->setSpacing(20);
-    PopulateCardGrid();
-    RefreshRibbonStats();
 }
 
 void
@@ -179,13 +186,29 @@ GameManagerForm::PopulateCardGrid(){
 }
 
 void
+GameManagerForm::RefreshAll(){
+    if (pPreviewPanel != nullptr) pPreviewPanel->close();
+    if (pStatsTable != nullptr) pStatsTable->close();
+
+    RefreshGameStats();
+    RefreshRibbonStats();
+    InitializeStatsTable();
+    InitializePreviewPanel();
+    PopulateCardGrid();
+}
+
+void
 GameManagerForm::AddCardToLayout(CGamePackage* gameItem){
     if (this->pGameManager == nullptr) return;
     if (!pGameManager->hasActiveProfile()) return;
-    pGameManager->getActiveProfile()->addToRegistry(gameItem);
 
-    qDebug() << "Added Mod to registry: " << gameItem->getName().c_str();
-    this->PopulateCardGrid();
+    /* Update registry and GUI */
+    gameItem->saveTo( pGameManager->getJsonPath() ); /* Save items to root manager path */
+    pGameManager->getActiveProfile()->addToRegistry(gameItem);
+    pGameManager->save();
+
+    qDebug() << "\nAdded Mod to registry: " << gameItem->getName().c_str();
+    this->RefreshAll();
 }
 
 void GameManagerForm::ClearGrid(){
@@ -197,7 +220,6 @@ void GameManagerForm::ClearGrid(){
 
 void GameManagerForm::on_HomeLabel_clicked()
 {
-    qDebug() << "Home activated";
     this->close();
 }
 

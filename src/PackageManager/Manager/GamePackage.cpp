@@ -1,10 +1,13 @@
 #include "GamePackage.h"
+#include "../../qtgameutils.hpp"
+#include <QDebug>
+
 using namespace ConfigUtils;
 
 
 void 
 CGamePackage::setAssetPath(const std::string& assetPath) {
-    this->m_AssetPath = assetPath;
+    this->m_AssetPath = unifySlashEncoding(assetPath);
 }
 
 void 
@@ -32,6 +35,87 @@ CGamePackage::setAuthorName(const char* name) {
     this->m_AuthorName = name;
 }
 
+JSON
+CGamePackage::serializeJsonObj(){
+    JSON jsonConfig;
+    jsonConfig["asset_name"] = this->getName();
+    jsonConfig["asset_path"] = this->getPath();
+    jsonConfig["asset_type"] = this->getType();
+    jsonConfig["asset_version"] = this->getFileVersion();
+    jsonConfig["asset_md5"] = this->getMD5();;
+    jsonConfig["author_name"] = this->getAuthor();
+    jsonConfig["replace_name"] = this->getReplaceAssetName();
+    jsonConfig["description"] = this->getDescription();
+    jsonConfig["creation_date"] = this->getDate();
+    jsonConfig["author_link"] = this->getLink();
+    jsonConfig["thumbnail_path"] = this->getThumbnailPath();
+    return jsonConfig;
+}
+
+std::string
+CGamePackage::getThumbnailPath(){
+    return this->m_ThumbnailPath;
+}
+
+void
+CGamePackage::setThumbnailPath(const std::string& path){
+    this->m_ThumbnailPath = unifySlashEncoding(path);
+}
+
+void
+CGamePackage::setJsonPath(const std::string& path){
+    this->m_JsonPath = unifySlashEncoding(path);
+}
+
+bool
+CGamePackage::saveJson(){
+    std::string configDir = extractFolderPath(getPath());
+    std::string configPath = configDir + "mod_config.json";
+    if (!canWriteToFile(configPath)) return false;
+
+    /* Generate JSON config */
+    std::ofstream file(configPath, std::ios::out);
+    file << std::setw(4) << this->serializeJsonObj();
+    file.close();
+    this->setJsonPath(configPath);
+    return true;
+}
+
+bool
+CGamePackage::moveContentsToRoot(const std::string& dir){
+    std::string newAssetPath = (dir+"\\") + extractFileName(getPath());
+
+    if (this->hasThumbnail())
+    {   /* Copy thumbnail if exists */
+        std::string thumbnailPath = (dir+"\\") +"thumbnail.jpg";
+        if (!ConfigUtils::copyFile(getThumbnailPath(),thumbnailPath))
+            return false;
+        this->setThumbnailPath(thumbnailPath);  }
+
+    if (!ConfigUtils::copyFile(getPath(),newAssetPath)) /* Attempt to copy assets to user path */
+        return false;
+
+    this->setAssetPath(newAssetPath); /* All copy operations successful */
+    return true;
+}
+
+bool
+CGamePackage::saveTo(const std::string& path){
+    // Create and check validity of directory
+    if (path == "" || getName() == "") return false;
+    std::string modPath = extractFolderPath(path) + this->getName();
+    if (!QTGameUtils::CreateUserDirectory(modPath.c_str())) return false;
+
+    if (!this->moveContentsToRoot(modPath)){
+        qDebug() << "\nFailed to copy contents";
+        return false; }
+    if (!this->saveJson()){
+        qDebug() << "\nFailed to save json.";
+        return false; }
+
+    return true;
+}
+
 void 
 CGamePackage::addCreationDate() {
     this->m_CreationDate = "MM/DD/YY";
@@ -52,6 +136,11 @@ CGamePackage::getName() {
     return this->m_PackageName;
 }
 
+std::string
+CGamePackage::getJsonPath(){
+    return this->m_JsonPath;
+}
+
 std::string 
 CGamePackage::getType() {
     return this->m_PackageType;
@@ -62,6 +151,10 @@ CGamePackage::getDescription() {
     return this->m_PackageDescription;
 }
 
+std::string
+CGamePackage::getLink(){
+    return this->m_AuthorLink;
+}
 unsigned int 
 CGamePackage::getSize() {
     return this->m_FileSize;
@@ -114,15 +207,18 @@ CGamePackage::getFileVersion() {
 
 void 
 CGamePackage::CollectJsonValues() {
-    //this->m_PackageName = m_ProfileJson["asset_name"];
-    //this->m_AssetPath = m_ProfileJson["asset_path"];
-    //this->m_PackageType = m_ProfileJson["asset_type"];
-    //this->m_FileVersion = m_ProfileJson["asset_version"];
-    //this->m_FileHash = m_ProfileJson["asset_md5"];
-    //this->m_ThumbnailPath = m_ProfileJson["thumbnail_path"];
-    //this->m_AuthorName = m_ProfileJson["author_name"];
-    //this->m_ReplacementTitle = m_ProfileJson["replace_name"];
-    //this->m_PackageDescription = m_ProfileJson["description"];
-    //this->m_CreationDate = m_ProfileJson["creation_date"];
-    //this->m_AuthorLink = m_ProfileJson["author_link"];
+
+    SetupExistingJSON(m_ProfileJson, m_JsonPath);
+
+    this->m_PackageName = m_ProfileJson["asset_name"];
+    this->m_AssetPath = m_ProfileJson["asset_path"];
+    this->m_PackageType = m_ProfileJson["asset_type"];
+    this->m_FileVersion = m_ProfileJson["asset_version"];
+    this->m_FileHash = m_ProfileJson["asset_md5"];
+    this->m_AuthorName = m_ProfileJson["author_name"];
+    this->m_ReplacementTitle = m_ProfileJson["replace_name"];
+    this->m_PackageDescription = m_ProfileJson["description"];
+    this->m_CreationDate = m_ProfileJson["creation_date"];
+    this->m_AuthorLink = m_ProfileJson["author_link"];
+    this->m_ThumbnailPath = m_ProfileJson["thumbnail_path"];
 }

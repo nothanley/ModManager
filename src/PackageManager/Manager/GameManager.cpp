@@ -32,8 +32,7 @@ CGameManager::getActiveProfile() {
 void
 CGameManager::setJsonPath(const std::string& path) {
     if (!canWriteToFile(path + "/game_config.json")) {
-        throw std::runtime_error("JSON configuration is inaccessible.");
-    }
+        throw std::runtime_error("JSON configuration is inaccessible.");    }
 
     this->m_JsonPath = path + "/game_config.json";
 }
@@ -73,6 +72,11 @@ CGameManager::getProfile(const char* name) {
 std::string 
 CGameManager::getGamePath() {
     return this->m_rootGamePath;
+}
+
+std::string
+CGameManager::getJsonPath() {
+    return this->m_JsonPath;
 }
 
 void 
@@ -192,15 +196,21 @@ void
 CGameManager::initModRegistry(CGameProfile* profile) {
     std::string profileName = profile->getName();
     std::vector<std::string> modRegistry = m_ManagerJson[profileName]["mod_registry"];
-
     profile->setModCount(modRegistry.size());
 
     for (const auto& modName : modRegistry) {
-        CGamePackage* mod = new CGamePackage(modName.c_str(), "Character", "Desktop");
-        int loadIndex = m_ManagerJson[profileName][modName]["load_index"];
-        mod->setEnabled(m_ManagerJson[profileName][modName]["status"]);
-        mod->setAssetPath(m_ManagerJson[profileName][modName]["path"]);
-        profile->addToRegistry(mod, loadIndex);
+        std::string modJsonPath = m_ManagerJson[profileName][modName]["path"];
+
+        try {
+            /* Initializes mod item with specified JSON path */
+            CGamePackage* mod = new CGamePackage(modJsonPath.c_str());
+            int loadIndex = m_ManagerJson[profileName][modName]["load_index"];
+            mod->setEnabled(m_ManagerJson[profileName][modName]["status"]);
+            profile->addToRegistry(mod, loadIndex);
+        }
+        catch (...) {
+            printf("Failed to load mod configuration: %s", modJsonPath.c_str());
+        }
     }
 }
 

@@ -17,12 +17,11 @@ public:
     }
 
     CGamePackage(const char* path) {
-        this->m_JsonPath = path;
-        bool canAccessFile = isFileAccessable(this->m_JsonPath);
+        this->setJsonPath(path);
 
         try { CollectJsonValues();}
         catch (...) {
-            throw std::runtime_error("Invalid Mod Configuration."); }
+            throw std::runtime_error("Invalid JSON."); }
     }
 
     void setAssetPath(const std::string& assetPath);
@@ -34,6 +33,7 @@ public:
     void setDate(const std::string &dateString);
     void addCreationDate();
     void setEnabled(bool toggle);
+    void setThumbnailPath(const std::string& path);
     bool hasThumbnail();
     bool getStatus();
     unsigned int getSize();
@@ -47,6 +47,10 @@ public:
     std::string getType();
     std::string getDescription();
     std::string getDate();
+    std::string getLink();
+    std::string getThumbnailPath();
+    std::string getJsonPath();
+    bool saveTo(const std::string& path);
 
 protected:
     std::string m_JsonPath;
@@ -63,6 +67,10 @@ private:
     std::string m_ReplacementTitle;
     std::string m_PackageDescription;
     std::string m_AuthorLink;
+    void setJsonPath(const std::string& path);
+    bool saveJson();
+    bool moveContentsToRoot(const std::string& dir);
+    JSON serializeJsonObj();
 
     long long m_FileHash = 0;
     float m_FileVersion= 0;

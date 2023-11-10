@@ -16,7 +16,6 @@ QTGameUtils::getCurrentDate() {
 
     // Format the date in "YYYY-MM-DD" format
     QString formattedDate = currentDateTime.toString("yyyy-MM-dd");
-
     return formattedDate;
 }
 
@@ -27,7 +26,7 @@ QTGameUtils::FileExistsOnDisk(const QString &filePath) {
 }
 
 bool
-QTGameUtils::CreateRoamingDirectory(const QString &directoryPath) {
+QTGameUtils::CreateUserDirectory(const QString &directoryPath) {
     QDir dir(directoryPath);
     if (!dir.exists())
         return dir.mkpath(directoryPath);
@@ -69,7 +68,7 @@ QTGameUtils::CreateGameJSON(const QString& gamePath, bool* isReadyFile){
 bool
 QTGameUtils::SetupGameConfig(const QString& gameTitle){
     QString gamePath = GetUserRoamingPath("Games/" + gameTitle);
-    bool isValidDirectory = CreateRoamingDirectory(gamePath);
+    bool isValidDirectory = CreateUserDirectory(gamePath);
     if (!isValidDirectory) return false;
 
     bool isGameJsonReady = false;
@@ -79,7 +78,7 @@ QTGameUtils::SetupGameConfig(const QString& gameTitle){
 
 void
 QTGameUtils::SetupManagerConfig(const QString& roamingPath){
-    bool isValidDirectory = CreateRoamingDirectory(roamingPath);
+    bool isValidDirectory = CreateUserDirectory(roamingPath);
     if (!isValidDirectory)
     {
         qDebug() << "Failed to setup MANAGER config.";
@@ -106,3 +105,4 @@ QTGameUtils::getRandomFilePath(const QString &directoryPath) {
 
     return directoryPath + "/" + randomFile;
 }
+

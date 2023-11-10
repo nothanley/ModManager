@@ -40,6 +40,8 @@ private slots:
     void on_GameCardButton_clicked();
     void addDialogClosed();
 
+    void on_GameCardButton_released();
+
 Q_SIGNALS:
     void TableUpdate(CGamePackage* gameMod);
 
@@ -51,8 +53,8 @@ private:
     QSvgRenderer m_SvgOutlineMsk = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
 
     /* Debug Constants */
-    constexpr static bool DEBUG_CARDS = true;
-    const QString DBG_TEMPLATE_DIR = "C:/Users/wauke/source/repos/ModManager/Widgets/BurgerMenu/icons/card_templates";
+    constexpr static bool DEBUG_CARDS = false;
+    const QString DBG_TEMPLATE_DIR = "C:/Users/wauke/source/repos/ModManager/src/Widgets/icons/card_templates";
 
     void mousePress(QEvent* event);
     void hoverEnter(QHoverEvent * event);

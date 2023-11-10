@@ -13,12 +13,11 @@ public:
         for (auto game:this->pGameManagers)
             delete game;
     }
-
     CManagerController(const char* path);
 
     int getGameCount();
     void addManager(CGameManager* manager);
-    CGameManager* createManager(const char* gameName);
+    CGameManager* createManager(const char* gameName); /* Creates and adds new manager given specified tag */
     CGameManager* getManager(const char* gameTitle);
 
 protected:
