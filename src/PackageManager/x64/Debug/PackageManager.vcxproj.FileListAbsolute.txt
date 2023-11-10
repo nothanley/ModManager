@@ -1,2 +1,0 @@
-C:\Users\wauke\source\repos\ModManager\PackageManager\x64\Debug\PackageManager.exe
-C:\Users\wauke\source\repos\ModManager\src\PackageManager\x64\Debug\PackageManager.exe
