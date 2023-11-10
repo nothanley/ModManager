@@ -111,6 +111,16 @@ QTGameUtils::getRandomFilePath(const QString &directoryPath) {
 #include "src/PackageManager/Utils/ConfigUtils.hpp"
 #include <QFileInfo>
 
+
+
+bool
+QTGameUtils::isGamePackageZip(const QString& directory){
+    ZipArchive::Ptr archive = ZipFile::Open(directory.toStdString());
+    ZipArchiveEntry::Ptr entry = archive->GetEntry("mod_config.json");
+    return (entry != nullptr);
+}
+
+
 bool
 QTGameUtils::unzipFile (const QString& zipPath ,const  QString& outPath ){
 

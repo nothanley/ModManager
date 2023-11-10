@@ -139,4 +139,26 @@ namespace ConfigUtils {
         return fixedPath;
     }
 
+    static bool
+    removeDirectory(const std::string& dirPath) {
+        try {
+            std::filesystem::remove_all(dirPath);
+            return true;
+        } catch (const std::filesystem::filesystem_error& e) {
+            std::cerr << "Error removing directory: " << e.what() << std::endl;
+            return false;
+        }
+    }
+
+
+    static bool
+    moveDirectory(const std::string& inDir, const std::string& outDir) {
+        try {
+            std::filesystem::rename(inDir, outDir);
+            return true;
+        } catch (const std::filesystem::filesystem_error& e) {
+            std::cerr << "Error moving directory: " << e.what() << std::endl;
+            return false;
+        }
+    }
 };

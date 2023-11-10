@@ -165,6 +165,12 @@ CGameManager::isExistingProfile(const std::string& targetName) {
     return this->getProfileIndex(targetName) != -1;
 }
 
+std::string
+CGameManager::getPath(){
+    std::string folderPath = ConfigUtils::extractFolderPath(this->m_JsonPath);
+    return ConfigUtils::unifySlashEncoding(folderPath);
+}
+
 int 
 CGameManager::getProfileIndex(const std::string& targetName) {
     for (int idx = 0; idx < this->getProfileCount(); idx++)

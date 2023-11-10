@@ -31,6 +31,7 @@ public:
     void setAuthorName(const char* name);
     void setReplacements(const char* replacements);
     void setDate(const std::string &dateString);
+    void setJsonPath(const std::string& path);
     void addCreationDate();
     void setEnabled(bool toggle);
     void setThumbnailPath(const std::string& path);
@@ -50,6 +51,8 @@ public:
     std::string getLink();
     std::string getThumbnailPath();
     std::string getJsonPath();
+    std::string getAssetFileName();
+    std::string getAssetPath();
     bool saveTo(const std::string& path);
 
 protected:
@@ -67,7 +70,6 @@ private:
     std::string m_ReplacementTitle;
     std::string m_PackageDescription;
     std::string m_AuthorLink;
-    void setJsonPath(const std::string& path);
     bool saveJson();
     bool moveContentsToRoot(const std::string& dir);
     JSON serializeJsonObj();

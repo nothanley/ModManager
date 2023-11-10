@@ -69,7 +69,7 @@ private:
     void InitializeStatsTable();
     void InitializePreviewPanel();
     bool ValidateManager(const char* gameName, const bool override=true);
-    void addZippedMod(const QString &path);
+    void createYesNoDialog(const char* prompt, bool* ok);
 //    bool eventFilter(QObject *object, QEvent *event);
 
     GameStatsTable* pStatsTable = nullptr;
@@ -78,6 +78,13 @@ private:
     CGameManager* pGameManager = nullptr;
     PreviewPanel* pPreviewPanel = nullptr;
     std::vector<GameCard*> pGameCards;
+
+
+    void addZippedMod(const QString &path);
+    CGamePackage* getZippedGamePak(const QString &zipPath, const QString &appPath);
+    bool moveModtoManagerRoot(CGamePackage* gameMod, const QString& path );
+    void addToActiveProfile(CGamePackage* mod);
+    CGamePackage* createGameZipPrompt(CGamePackage* gameMod);
 };
 
 #endif // GAMEMANAGERFORM_H

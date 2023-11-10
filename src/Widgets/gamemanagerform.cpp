@@ -252,18 +252,93 @@ GameManagerForm::on_sizeUpButton_clicked()
 }
 
 #include <QFileInfo>
+#include <QMessageBox>
+
+CGamePackage*
+GameManagerForm::getZippedGamePak(const QString& zipPath, const QString& appPath ){
+    CGamePackage* gameMod;
+
+    CreateUserDirectory(appPath);    /* Unzip contents to manager root */
+    if (!unzipFile(zipPath,appPath)) return nullptr;
+
+    std::string configPath = appPath.toStdString() + "mod_config.json";
+    gameMod = new CGamePackage(configPath.c_str());
+    if (gameMod == nullptr) return nullptr;
+
+    return createGameZipPrompt(gameMod); /* Query's user if mod is preexisting */
+}
+
+void
+GameManagerForm::createYesNoDialog(const char* prompt, bool* ok){
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Mod Manager");
+    msgBox.setText(prompt);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.addButton(QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    *ok = (msgBox.exec() == QMessageBox::Ok);
+}
+
+CGamePackage*
+GameManagerForm::createGameZipPrompt(CGamePackage* gameMod){
+    /* Returns null if user does not want to replace existing mod */
+    bool isExistingMod = pGameManager->getActiveProfile()->
+                         getIndex(gameMod->getName()) != -1;
+    if (!isExistingMod) return gameMod;
+
+    bool replaceMod;
+    std::string userPrompt = "Overwrite existing mod: "+gameMod->getName()+"?";
+    createYesNoDialog(userPrompt.c_str(),&replaceMod);
+
+    // cleanup memory if user declines overwrite
+    if (!replaceMod){
+        delete gameMod;
+        gameMod = nullptr;
+    }
+    return gameMod;
+}
+
+bool
+GameManagerForm::moveModtoManagerRoot(CGamePackage* gameMod, const QString &path){
+    std::string targetPath = pGameManager->getPath() + gameMod->getName();
+    ConfigUtils::removeDirectory(targetPath); /* Clear target folder first */
+
+    /* Update Paths (todo: these should be relative) */
+    gameMod->setJsonPath( targetPath + "/mod_config.json" );
+    gameMod->setThumbnailPath( targetPath + "/thumbnail.jpg" );
+    gameMod->setAssetPath( targetPath + "/" + gameMod->getAssetFileName() );
+
+    return ConfigUtils::moveDirectory( path.toStdString(),
+                                      targetPath);
+}
+
+void
+GameManagerForm::addToActiveProfile(CGamePackage* mod){
+    this->pGameManager->getActiveProfile()->addToRegistry(mod);
+    pGameManager->save();
+    qDebug() << "\nAdded Mod to registry: " << mod->getName().c_str();
+    this->RefreshAll();
+}
 
 void
 GameManagerForm::addZippedMod(const QString& path){
-    QString appDataPath = GetUserRoamingPath("") + "/";
-    appDataPath += QFileInfo(path).baseName() + "/";
+    QString appDataPath = GetUserRoamingPath("") + "/" +
+                          QFileInfo(path).baseName() + "/";
 
-    CreateUserDirectory(appDataPath);
-    if (!unzipFile(path,appDataPath)){
-        qDebug() << "Could not decompress file." << appDataPath;
-        return;}
+    /* Check zip contents for mod_config.json */
+    if (!QTGameUtils::isGamePackageZip(path))
+        return;
+    CGamePackage* gameMod = getZippedGamePak(path,appDataPath);
 
-    qDebug() << "Adding file: " << appDataPath;
+    if (gameMod == nullptr){
+        qDebug() << "No assets loaded.";
+        return; }
+
+    if (!this->moveModtoManagerRoot(gameMod,appDataPath)){
+        qDebug() << "Failed to save assets to manager.";
+        return; }
+
+    addToActiveProfile(gameMod);
 }
 
 

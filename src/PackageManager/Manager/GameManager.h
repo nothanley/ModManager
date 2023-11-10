@@ -22,6 +22,7 @@ public:
     std::string getGameName();
     std::string getGamePath();
     std::string getJsonPath();
+    std::string getPath();
     unsigned int getProfileCount();
     bool hasActiveProfile();
 

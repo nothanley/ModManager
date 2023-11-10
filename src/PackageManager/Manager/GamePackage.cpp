@@ -5,6 +5,11 @@
 using namespace ConfigUtils;
 
 
+std::string
+CGamePackage::getAssetPath(){
+    return this->m_AssetPath;
+}
+
 void 
 CGamePackage::setAssetPath(const std::string& assetPath) {
     this->m_AssetPath = unifySlashEncoding(assetPath);
@@ -97,6 +102,11 @@ CGamePackage::moveContentsToRoot(const std::string& dir){
 
     this->setAssetPath(newAssetPath); /* All copy operations successful */
     return true;
+}
+
+std::string
+CGamePackage::getAssetFileName(){
+    return ConfigUtils::extractFileName(this->m_AssetPath);
 }
 
 bool

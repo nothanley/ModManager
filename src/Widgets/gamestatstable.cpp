@@ -58,7 +58,6 @@ void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
     table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getFileVersion())) );
     table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getMD5())) );
 
-
     // Enable Button
     QPushButton* enableButton = new QPushButton();
     enableButton->setText("Enable");
