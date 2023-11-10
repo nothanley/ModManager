@@ -1,12 +1,15 @@
 #include "gamemanagerform.h"
 #include "ui_gamemanagerform.h"
 #include "src/qtgameutils.hpp"
+#include "src/PackageManager/Manager/ManagerController.h"
 #include "gamecard.h"
 #include "gamestatstable.h"
 #include "previewpanel.h"
 #include <QDebug>
 #include <QLayout>
-#include "src/PackageManager/Manager/ManagerController.h"
+#include <QHoverEvent>
+#include <QMimeData>
+
 using namespace QTGameUtils;
 
 GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :
@@ -14,6 +17,7 @@ GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :
     ui(new Ui::GameManagerForm)
 {
     this->setEnabled(false);
+    this->setAcceptDrops(true);
 
     // Setup low-level manager.
     InitializeManagerSettings();
@@ -211,20 +215,23 @@ GameManagerForm::AddCardToLayout(CGamePackage* gameItem){
     this->RefreshAll();
 }
 
-void GameManagerForm::ClearGrid(){
+void
+GameManagerForm::ClearGrid(){
     for (auto card : this->pGameCards){
         delete card;}
     pGameCards.clear();
 }
 
 
-void GameManagerForm::on_HomeLabel_clicked()
+void
+GameManagerForm::on_HomeLabel_clicked()
 {
     this->close();
 }
 
 
-void GameManagerForm::on_sizeDownButton_clicked()
+void
+GameManagerForm::on_sizeDownButton_clicked()
 {
     this->m_CustomGridScale = (m_CustomGridScale < MIN_GRID_SCALE) ?
                 MIN_GRID_SCALE : m_CustomGridScale-1;
@@ -234,7 +241,8 @@ void GameManagerForm::on_sizeDownButton_clicked()
 }
 
 
-void GameManagerForm::on_sizeUpButton_clicked()
+void
+GameManagerForm::on_sizeUpButton_clicked()
 {
     this->m_CustomGridScale = (m_CustomGridScale > MAX_GRID_SCALE) ?
                 MAX_GRID_SCALE : m_CustomGridScale+1;
@@ -242,4 +250,60 @@ void GameManagerForm::on_sizeUpButton_clicked()
     qDebug() << "VALUE: " << m_CustomGridScale;
     PopulateCardGrid();
 }
+
+#include <QFileInfo>
+
+void
+GameManagerForm::addZippedMod(const QString& path){
+    QString appDataPath = GetUserRoamingPath("") + "/";
+    appDataPath += QFileInfo(path).baseName() + "/";
+
+    CreateUserDirectory(appDataPath);
+    if (!unzipFile(path,appDataPath)){
+        qDebug() << "Could not decompress file." << appDataPath;
+        return;}
+
+    qDebug() << "Adding file: " << appDataPath;
+}
+
+
+void
+GameManagerForm::dropEvent(QDropEvent *event){
+
+    QUrl link = event->mimeData()->urls().last();
+    QString dragText = link.toLocalFile();
+
+    if (dragText.toLower().endsWith(".zip") ){
+        addZippedMod(dragText);
+    }
+
+}
+
+void
+GameManagerForm::dragEnterEvent(QDragEnterEvent *event)
+{
+   QUrl link = event->mimeData()->urls().last();
+   QString dragText = link.toLocalFile();
+
+   if ( dragText.toLower().endsWith(".cak") ||
+        dragText.toLower().endsWith(".zip") )
+       event->acceptProposedAction();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

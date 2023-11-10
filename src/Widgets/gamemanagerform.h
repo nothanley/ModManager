@@ -46,6 +46,8 @@ private slots:
     void on_sizeUpButton_clicked();
 
 protected:
+    void dropEvent(QDropEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
     void ClearGrid();
     void ResetLayout(); /* Clears existing UI elements */
     void RefreshGameStats();
@@ -67,7 +69,8 @@ private:
     void InitializeStatsTable();
     void InitializePreviewPanel();
     bool ValidateManager(const char* gameName, const bool override=true);
-
+    void addZippedMod(const QString &path);
+//    bool eventFilter(QObject *object, QEvent *event);
 
     GameStatsTable* pStatsTable = nullptr;
     Ui::GameManagerForm *ui;
@@ -78,3 +81,14 @@ private:
 };
 
 #endif // GAMEMANAGERFORM_H
+
+
+
+
+
+
+
+
+
+
+

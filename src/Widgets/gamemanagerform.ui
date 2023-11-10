@@ -10,6 +10,9 @@
     <height>725</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -64,6 +67,9 @@ QScrollBar::add-page:vertical {
    </property>
    <item row="0" column="0">
     <widget class="QSplitter" name="HorizontalSplitter">
+     <property name="acceptDrops">
+      <bool>true</bool>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -71,6 +77,9 @@ QScrollBar::add-page:vertical {
       <number>5</number>
      </property>
      <widget class="QFrame" name="ContentFrame">
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">QWidget{
 	background-color: rgba(0, 0, 0,0);
@@ -1155,6 +1164,9 @@ QPushButton::pressed{
             <height>16777215</height>
            </size>
           </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">QWidget{
 	border: 3px  rgba(40,40,40,80);
@@ -1198,6 +1210,9 @@ QLabel{
               </size>
              </property>
              <property name="mouseTracking">
+              <bool>true</bool>
+             </property>
+             <property name="acceptDrops">
               <bool>true</bool>
              </property>
              <property name="styleSheet">
@@ -1245,6 +1260,9 @@ QLabel{
                </size>
               </property>
               <property name="mouseTracking">
+               <bool>true</bool>
+              </property>
+              <property name="acceptDrops">
                <bool>true</bool>
               </property>
               <property name="styleSheet">

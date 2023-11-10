@@ -11,5 +11,5 @@ namespace QTGameUtils{
     bool SetupGameConfig(const QString& gameTitle);
     void SetupManagerConfig(const QString& roamingPath);
     QString getRandomFilePath(const QString &directoryPath);
-
+    bool unzipFile (const QString &zipPath , const QString &outPath );
 };

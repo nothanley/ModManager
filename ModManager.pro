@@ -1,12 +1,17 @@
 QT += core gui
 QT += svg
 
+INCLUDEPATH += \
+    extlibs/ \
+    extlibs/ziplib/
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = ModManager
 TEMPLATE = app
 
-SOURCES += src/main.cpp\
+SOURCES += \
+    src/main.cpp\
     src/PackageManager/Manager/GameManager.cpp \
     src/PackageManager/Manager/GamePackage.cpp \
     src/PackageManager/Manager/GameProfile.cpp \
@@ -39,6 +44,7 @@ HEADERS  += \
     src/pixmaputils.hpp \
     src/qtgameutils.hpp
 
+
 LIBS += -L"C:\Program Files\Microsoft SDKs\Windows\v7.1\Lib" \
         -ldwmapi \
         -lgdi32
@@ -60,4 +66,15 @@ win32:RC_ICONS += src/WindowHandler/icons/logo_main_icon.ico
 CONFIG+=c++2a
 DEFINES -= UNICODE
 DEFINES += _MBCS
+
+
+INCLUDEPATH += $$PWD/extlibs
+DEPENDPATH += $$PWD/extlibs
+
+
+
+LIBS += $$PWD/extlibs/lzma.lib
+LIBS += $$PWD/extlibs/zlib.lib
+LIBS += $$PWD/extlibs/ZipLib.lib
+LIBS += $$PWD/extlibs/bzip2.lib
 

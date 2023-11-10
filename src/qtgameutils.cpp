@@ -106,3 +106,39 @@ QTGameUtils::getRandomFilePath(const QString &directoryPath) {
     return directoryPath + "/" + randomFile;
 }
 
+#pragma comment(lib,"ZipLib.lib")
+#include <ziplib/ZipFile.h>
+#include "src/PackageManager/Utils/ConfigUtils.hpp"
+#include <QFileInfo>
+
+bool
+QTGameUtils::unzipFile (const QString& zipPath ,const  QString& outPath ){
+
+    /* Validate zip file */
+    ZipArchive::Ptr archive = ZipFile::Open(zipPath.toStdString());
+    if (archive == nullptr){ return false;}
+    int numEntries = archive->GetEntriesCount();
+
+    /* Iterate and extract all valid contents */
+    for (int i = 0; i < numEntries; i++){
+         ZipArchiveEntry::Ptr file = archive->GetEntry(i);
+         std::string filePath = outPath.toStdString() + file->GetFullName();
+         std::string fileDir =  ConfigUtils::extractFolderPath(filePath);
+
+         CreateUserDirectory( QString::fromStdString(fileDir) );
+
+         if ( ConfigUtils::canWriteToFile(filePath) &&
+              file->CanExtract() &&
+              !file->IsPasswordProtected() )
+             ZipFile::ExtractFile(zipPath.toStdString(), file->GetFullName(), filePath);
+    }
+
+    return true;
+}
+
+
+
+
+
+
+
