@@ -184,7 +184,7 @@ QTextEdit{
           <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -253,7 +253,7 @@ QTextEdit{
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="ThumbnailLabel">
+          <widget class="QPushButton" name="previewImage">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -262,19 +262,20 @@ QTextEdit{
            </property>
            <property name="maximumSize">
             <size>
-             <width>102</width>
-             <height>55</height>
+             <width>104</width>
+             <height>54</height>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-radius: 3px;
-background-color: rgb(0, 0, 0);</string>
+            <string notr="true">background-color: rgb(0, 0, 0);
+border: 0px;
+border-radius: 1px;</string>
            </property>
            <property name="text">
-            <string>Preview Image</string>
+            <string/>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+           <property name="flat">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

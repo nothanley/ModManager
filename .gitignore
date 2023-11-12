@@ -167,3 +167,11 @@ extlibs/11Zip/include/elzip/zipper.hpp
 extlibs/11Zip/include/elzip/unzipper.hpp
 extlibs/11Zip/include/elzip/fswrapper.hpp
 extlibs/11Zip/include/elzip/elzip.hpp
+*.html
+*.css
+*.js
+*.tex
+*.eps
+*.sty
+docs/latex/make.bat
+docs/latex/Makefile

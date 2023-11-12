@@ -767,7 +767,7 @@ QPushButton:pressed{
                 </font>
                </property>
                <property name="text">
-                <string>MORE</string>
+                <string>ADD NEW</string>
                </property>
               </widget>
              </item>
@@ -799,41 +799,11 @@ QPushButton:pressed{
                 </font>
                </property>
                <property name="text">
-                <string>LINK</string>
+                <string>BAKE NEW</string>
                </property>
               </widget>
              </item>
             </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="font">
-             <font>
-              <family>Segoe UI</family>
-              <pointsize>9</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>HOME</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_3">
-            <property name="font">
-             <font>
-              <family>Segoe UI</family>
-              <pointsize>9</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>EXTRA</string>
-            </property>
            </widget>
           </item>
           <item>
@@ -1212,6 +1182,9 @@ QLabel{
              <property name="mouseTracking">
               <bool>true</bool>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="acceptDrops">
               <bool>true</bool>
              </property>
@@ -1236,7 +1209,7 @@ QLabel{
               <bool>true</bool>
              </property>
              <property name="alignment">
-              <set>Qt::AlignHCenter|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
              </property>
              <widget class="QWidget" name="GameCardGrid">
               <property name="geometry">

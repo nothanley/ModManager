@@ -8,6 +8,7 @@
 #include <QDebug>
 #include "additemdialog.h"
 #include "gamemanagerform.h"
+#include <QMenu>
 
 GameCard::GameCard(QWidget *parent, CGamePackage* gameMod, GameManagerForm* form) :
     QWidget(parent),
@@ -15,16 +16,29 @@ GameCard::GameCard(QWidget *parent, CGamePackage* gameMod, GameManagerForm* form
 {
     ui->setupUi(this);
     this->pParentForm = form;
-    this->setMouseTracking(true);
     this->pGameMod = gameMod;
     this->setAttribute(Qt::WA_Hover, true);
+    this->setAttribute(Qt::WA_DeleteOnClose,true);
+    this->setMouseTracking(true);
 }
 
 GameCard::~GameCard()
 {
     delete this->pLabelGraphic;
-    delete this->pItemDialog;
     delete ui;
+}
+
+QString
+GameCard::getItemName(){
+    if (this->isEmptyCard())
+        return "";
+
+    return QString::fromStdString( pGameMod->getName());
+}
+
+void
+GameCard::focus(){
+    ui->GameCardButton->click();
 }
 
 bool
@@ -38,26 +52,6 @@ GameCard::hoverEnter(QHoverEvent * event) {
     this->m_IsHoverDecorated = false;
     if (this->pLabelGraphic != nullptr)
         setHoverDecoration();
-}
-
-void
-GameCard::addDialogClosed(){
-    this->pItemDialog = nullptr;
-}
-
-void
-GameCard::createAddItemDialog() {
-    if (this->pItemDialog != nullptr){ pItemDialog->show(); return; }
-    if (this->pParentForm == nullptr){ return; }
-    pItemDialog = new AddItemDialog();
-    pItemDialog->show();
-
-    QObject::connect(pItemDialog, &AddItemDialog::sendItem, /* Connect SEND signals in mainlayout & dialogue */
-                     this->pParentForm,
-                     &GameManagerForm::AddCardToLayout );
-
-    QObject::connect(pItemDialog, &AddItemDialog::interfaceClose,
-                     this, &GameCard::addDialogClosed); /* Connect close signals in this & child dialog */
 }
 
 void
@@ -101,8 +95,8 @@ void
 GameCard::decorate(){
     auto effect = new QGraphicsDropShadowEffect;
     effect->setBlurRadius(9);
-    effect->setColor(QColor(0,0,0,60));
-    effect->setOffset(2,2);
+    effect->setColor(QColor(0,0,0,40));
+    effect->setOffset(3,3);
     this->setGraphicsEffect(effect);
 
     if ( this->isEmptyCard() || !this->isTextEnabled() ) return;
@@ -113,8 +107,6 @@ void
 GameCard::drawImageToPainter( QPainter* painter, const QString& imagePath, QSize* mapSize ){
     QImage image =  QImage(imagePath);
 
-    if (DEBUG_CARDS)
-        image = QImage( QTGameUtils::getRandomFilePath( DBG_TEMPLATE_DIR ) );
     QSize targetSize = (mapSize != nullptr) ? *mapSize : this->size();
     painter->drawImage( QRect(QPoint(0,0), targetSize ), image.scaled(targetSize) );
 }
@@ -207,16 +199,14 @@ GameCard::drawCardGraphics(){
     QPainter backgroundPainter(&pixmap);
 
     // Draw card image and foreground effects
-    if ( this->pGameMod->hasThumbnail() )
-    {
+    if ( this->pGameMod->hasThumbnail() ){
         drawImageToPainter( &backgroundPainter, pGameMod->getThumbnailPath().c_str() );
     }
     else{
         backgroundPainter.drawPixmap(0,0, PixMapUtils::CreateGradientMap( size(),
                                                             QColor(60,60,80),
                                                             QColor(70,70,80) ));
-        drawStylizedTextToMap(&backgroundPainter, pGameMod->getName().c_str() );
-    }
+        drawStylizedTextToMap(&backgroundPainter, pGameMod->getName().c_str() );   }
 
 
     drawImageOverlayToPainter(&backgroundPainter, ":/icons/card_sheen_overlay.png", OVERLAY_WEIGHT);
@@ -236,6 +226,7 @@ GameCard::setHoverDecoration(){
     drawHoverOverlay(this->pLabelGraphic,1,
                      QColor(10,10,10), QColor(150,190,250) );
 
+
     drawBorderMask(this->pLabelGraphic);
     this->m_IsHoverDecorated = true;
 }
@@ -245,7 +236,7 @@ GameCard::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
 
     // Draw Base Graphic
-    if ( !this->pLabelGraphic ){
+    if ( this->pLabelGraphic == nullptr ){
         pLabelGraphic = new QPixmap();
         *pLabelGraphic = this->isEmptyCard() ? drawVacantGraphics() : drawCardGraphics();
         drawBorderMask(this->pLabelGraphic);
@@ -258,15 +249,74 @@ GameCard::paintEvent(QPaintEvent *event){
  }
 
 
-
-void GameCard::on_GameCardButton_clicked(){}
-
 void GameCard::on_GameCardButton_released()
 {
     if ( this->isEmptyCard() ){
-        createAddItemDialog();
-        return;}
+        pParentForm->createItemDialog(pGameMod);
+        return;
+    }
 
-    TableUpdate(this->pGameMod);
+    pParentForm->PopulatePreviewPanel(pGameMod);
+    emit TableUpdate(this->pGameMod);
 }
+
+
+void GameCard::on_GameCardButton_customContextMenuRequested(const QPoint &pos)
+{
+    /* Force graphic redraw */
+    delete this->pLabelGraphic;
+    this->pLabelGraphic = nullptr;
+
+    QMenu contextMenu(tr("Context menu"), this);
+
+    if (this->isEmptyCard())
+        return;
+
+    /* Add dialog buttons */
+    QAction action0("Export to file", this);
+    connect(&action0, SIGNAL(triggered()), this, SLOT(saveToZip()));
+    contextMenu.addAction(&action0);
+
+    QAction action1("Edit details", this);
+    connect(&action1, SIGNAL(triggered()), this, SLOT(editModDetails()));
+    contextMenu.addAction(&action1);
+
+    QAction action3("Replace profile mod", this);
+    connect(&action3, SIGNAL(triggered()), this, SLOT(replaceMod()));
+    contextMenu.addAction(&action3);
+
+    QAction action4("Remove profile mod", this);
+    connect(&action4, SIGNAL(triggered()), this, SLOT(sendRemoveModToUI()));
+    contextMenu.addAction(&action4);
+
+    QAction action2("Add new mod", this);
+    connect(&action2, SIGNAL(triggered()), this, SLOT(addProfileMod()));
+    contextMenu.addAction(&action2);
+    contextMenu.exec(mapToGlobal(pos));
+}
+
+void GameCard::editModDetails(){
+    pParentForm->createItemDialog(pGameMod);
+}
+
+void GameCard::addProfileMod(){
+    pParentForm->createItemDialog(nullptr);
+}
+
+void GameCard::sendRemoveModToUI(){
+    pParentForm->removeProfileMod(pGameMod);
+}
+
+void GameCard::saveToZip(){
+
+}
+
+void GameCard::replaceMod(){
+
+}
+
+
+
+
+
 

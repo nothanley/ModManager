@@ -26,7 +26,8 @@ namespace PixMapUtils{
 
         if (width > 0 && height > 0) {
             QPixmap stretchedPixmap = originalPixmap.copy(left, top, width, height);
-            *pixmap = stretchedPixmap.scaled(originalPixmap.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation); }
+//            *pixmap = stretchedPixmap.scaled(originalPixmap.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        }
     }
 
     static void

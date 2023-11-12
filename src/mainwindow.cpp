@@ -89,15 +89,13 @@ MainWindow::PerformSideBarAction(QAction* action){
 
 void
 MainWindow::SetupGameSidebar(BurgerMenu* pSideBar){
-
     pSideBar->setMinimumWidth(62);
     pSideBar->setBurgerIcon(QIcon(":/icons/burger.png"));
     pSideBar->addMenuAction(QIcon("://icons/game-sidebar-icon-placeholderdummy.png"),"WWE 2K23");
     pSideBar->addMenuAction(QIcon("://icons/game-sidebar-icon-placeholderdummy.png"),"WWE 2K22");
 
     QObject::connect(pSideBar, &BurgerMenu::triggered, [&](QAction* action){
-        PerformSideBarAction(action);
-    });
+        PerformSideBarAction(action);   });
 }
 
 void
@@ -118,7 +116,6 @@ MainWindow::CreateGameManager(const long long& gameHash){
     if (!pManagerForm->isEnabled()){ return; }
 
    ui->BodyDummy->layout()->addWidget(pManagerForm);
-
 }
 
 void MainWindow::on_githubButton_clicked()

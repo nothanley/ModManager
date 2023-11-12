@@ -9,6 +9,10 @@
 #include <QLayout>
 #include <QHoverEvent>
 #include <QMimeData>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QGraphicsBlurEffect>
+#include "additemdialog.h"
 
 using namespace QTGameUtils;
 
@@ -29,12 +33,23 @@ GameManagerForm::GameManagerForm(const long long& userTitle, QWidget *parent) :
 
 GameManagerForm::~GameManagerForm()
 {
-    for (auto card: this->pGameCards) delete card;
+    if (this->hasItemDialog())
+        this->pItemDialog->close();
+
+    for (auto card: this->pGameCards)
+        card->close();
+
     delete this->m_CTRLManager;
     delete ui;
 }
 
-void AddDebugPackages(CGameManager* manager, int numPlaceholders){
+bool
+GameManagerForm::hasItemDialog(){
+    return this->pItemDialog != nullptr;
+}
+
+void
+AddDebugPackages(CGameManager* manager, int numPlaceholders){
     for (int i = 0; i < numPlaceholders; i++){
         std::string modTitle = "PlaceHolder_Mod " + std::to_string(i);
         CGamePackage* placeholderMod = new CGamePackage(modTitle.c_str(),"Misc","No Path");
@@ -42,10 +57,20 @@ void AddDebugPackages(CGameManager* manager, int numPlaceholders){
     }
 }
 
+
+void
+GameManagerForm::openPakInExplorer(CGamePackage* mod){
+    qDebug() << "Open explorer page here";
+}
+
 void
 GameManagerForm::InitializeStatsTable(){
     delete pStatsTable;
     this->pStatsTable = new GameStatsTable(this);
+
+    QObject::connect(pStatsTable, &GameStatsTable::editItem, this, &GameManagerForm::createItemDialog );
+    QObject::connect(pStatsTable, &GameStatsTable::extractItem, this, &GameManagerForm::openPakInExplorer );
+
     ui->PackageDetails->layout()->addWidget(pStatsTable);
 }
 
@@ -69,12 +94,28 @@ GameManagerForm::PopulateManagerGUI(){
 
     if (this->m_GameTitle == ""){ return; }
     pGameManager = m_CTRLManager->getManager(m_GameTitle.c_str());
-    #ifdef DEBUG_MODE
-        /* Debug Populate empty profile. Alter after GUI build. */
-        pGameManager->createProfile("Default",true);
-        AddDebugPackages(this->pGameManager,DEBUG_TOTAL_CARDS);
-    #endif
     GetManagerLayoutGeneral();
+}
+
+void
+GameManagerForm::clearItemDialog(){
+    this->pItemDialog = nullptr;
+}
+
+void
+GameManagerForm::createItemDialog(CGamePackage* mod){
+    if (this->hasItemDialog())
+        return;
+
+    pItemDialog = new AddItemDialog(nullptr,mod);
+    pItemDialog->show();
+
+    QObject::connect(pItemDialog, &AddItemDialog::sendItem, /* Connect SEND signals in mainlayout & dialogue */
+                     this,
+                     &GameManagerForm::AddCardToLayout );
+
+    QObject::connect(pItemDialog, &AddItemDialog::interfaceClose,
+                     this, &GameManagerForm::clearItemDialog); /* Connect close signals in this & child dialog */
 }
 
 void
@@ -87,7 +128,7 @@ GameManagerForm::InitializeManagerSettings(){
         Q_ASSERT(m_CTRLManager->getGameCount() == 0);
         return; }
 
-    qDebug() << "Loaded User Config: " << roamingPath;
+    qDebug() << "\nLoaded User Config: " << roamingPath;
 }
 
 void
@@ -95,6 +136,10 @@ GameManagerForm::InitializePreviewPanel(){
     this->pPreviewPanel = new PreviewPanel(this);
     pPreviewPanel->setModel( pGameManager->getActiveProfile() );
     ui->RightPanelLayout->layout()->addWidget(this->pPreviewPanel);
+
+    connect(pPreviewPanel, &PreviewPanel::sendLocalSave,
+                     this, &GameManagerForm::saveLocalConfigs); /* Connect close signals in this & child dialog */
+
 }
 
 void
@@ -143,6 +188,42 @@ GameManagerForm::ValidateManager(const char* gameName, const bool override)
 }
 
 void
+GameManagerForm::refreshProfileComboBox()
+{
+    ui->comboBox->clear();
+    for (auto& profile : pGameManager->getProfiles()){
+        std::string name = profile.getName();
+        ui->comboBox->addItem(name.c_str());
+    }
+}
+
+void
+GameManagerForm::saveLocalConfigs(){
+    /* save active item */
+    QString activeItem;
+    if (pStatsTable != nullptr)
+        activeItem = pStatsTable->getCurrentTableItem();
+
+    /* save config and redraw UI */
+    this->pGameManager->save();
+    this->RefreshAll();
+
+    /* Refocus previous grid card */
+    this->focusItem(activeItem);
+}
+
+void
+GameManagerForm::focusItem(const QString name){
+    if (name == "") return;
+
+    for (const auto& card : this->pGameCards)
+        if( card->getItemName().toUpper() == name.toUpper() )  {
+            card->focus();
+            break;
+        }
+}
+
+void
 GameManagerForm::GetManagerLayoutGeneral()
 {
     if (!this->ValidateManager(m_GameTitle.c_str())){
@@ -164,10 +245,19 @@ GameManagerForm::PopulatePreviewPanel(CGamePackage *selectedMod){
 }
 
 void
-GameManagerForm::PopulateCardGrid(){
-    QGridLayout* gridLayout = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
+GameManagerForm::removeProfileMod(CGamePackage* mod){
+    CGameProfile* profile = pGameManager->getActiveProfile();
+    profile->removeFromRegistry(mod);
+    pGameManager->save();
+    this->RefreshAll();
+}
 
+void
+GameManagerForm::PopulateCardGrid(){
+
+    QGridLayout* gridLayout = static_cast<QGridLayout*>( ui->GameCardGrid->layout() );
     ClearGrid();
+
     int numGameCards = pGameManager->getActiveProfile()->getAllMods().size();
     for (int i = 0; i < numGameCards+1; i++){
         CGamePackage* gamePack = nullptr;
@@ -185,7 +275,6 @@ GameManagerForm::PopulateCardGrid(){
                              i % int(GRID_SCALE /10.0* m_CustomGridScale/10.0) );
 
         QObject::connect(gameTile, &GameCard::TableUpdate, this->pStatsTable, &GameStatsTable::UpdateStatsTable );
-        QObject::connect(gameTile, &GameCard::TableUpdate, this, &GameManagerForm::PopulatePreviewPanel );
     }
 }
 
@@ -198,6 +287,7 @@ GameManagerForm::RefreshAll(){
     RefreshRibbonStats();
     InitializeStatsTable();
     InitializePreviewPanel();
+    refreshProfileComboBox();
     PopulateCardGrid();
 }
 
@@ -208,17 +298,14 @@ GameManagerForm::AddCardToLayout(CGamePackage* gameItem){
 
     /* Update registry and GUI */
     gameItem->saveTo( pGameManager->getJsonPath() ); /* Save items to root manager path */
-    pGameManager->getActiveProfile()->addToRegistry(gameItem);
-    pGameManager->save();
-
-    qDebug() << "\nAdded Mod to registry: " << gameItem->getName().c_str();
-    this->RefreshAll();
+    addToActiveProfile(gameItem);
 }
 
 void
 GameManagerForm::ClearGrid(){
     for (auto card : this->pGameCards){
-        delete card;}
+        card->close();
+    }
     pGameCards.clear();
 }
 
@@ -250,9 +337,6 @@ GameManagerForm::on_sizeUpButton_clicked()
     qDebug() << "VALUE: " << m_CustomGridScale;
     PopulateCardGrid();
 }
-
-#include <QFileInfo>
-#include <QMessageBox>
 
 CGamePackage*
 GameManagerForm::getZippedGamePak(const QString& zipPath, const QString& appPath ){
@@ -293,8 +377,8 @@ GameManagerForm::createGameZipPrompt(CGamePackage* gameMod){
     // cleanup memory if user declines overwrite
     if (!replaceMod){
         delete gameMod;
-        gameMod = nullptr;
-    }
+        gameMod = nullptr;  }
+
     return gameMod;
 }
 
@@ -316,7 +400,7 @@ void
 GameManagerForm::addToActiveProfile(CGamePackage* mod){
     this->pGameManager->getActiveProfile()->addToRegistry(mod);
     pGameManager->save();
-    qDebug() << "\nAdded Mod to registry: " << mod->getName().c_str();
+    qDebug() << "Added Mod to registry: " << mod->getName().c_str();
     this->RefreshAll();
 }
 
@@ -341,19 +425,51 @@ GameManagerForm::addZippedMod(const QString& path){
     addToActiveProfile(gameMod);
 }
 
+void
+GameManagerForm::addCakeMod(const QString& path){
+    std::string baseName = QFileInfo(path).baseName().toStdString();
+    CGamePackage* gameMod = new CGamePackage(  baseName.c_str(), "Misc",
+                                               path.toStdString().c_str() );
+    // Check existing
+    createGameZipPrompt(gameMod);
+    if (gameMod == nullptr)
+        return;
+
+    // Add Data to Item
+    gameMod->setEnabled(true);
+    gameMod->setDate( QTGameUtils::getCurrentDate().toStdString() );
+
+    if ( !gameMod->saveTo(pGameManager->getPath()) ){
+        qDebug() << "Failed to save assets to manager.";
+        return; }
+
+    addToActiveProfile(gameMod);
+}
 
 void
 GameManagerForm::dropEvent(QDropEvent *event){
-
     QList<QUrl> links = event->mimeData()->urls();
+    dragLeaveEvent(nullptr);
 
     for (const auto& link : links){
         QString item = link.toLocalFile();
 
         if (item.toLower().endsWith(".zip") ){
             addZippedMod(item); }
+
+        if (item.toLower().endsWith(".cak") ){
+            addCakeMod(item); }
     }
 }
+
+void
+GameManagerForm::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    delete ui->GameCardGrid->graphicsEffect();
+    ui->GameCardGrid->setGraphicsEffect(nullptr);
+    ui->GameCardGrid->repaint();
+}
+
 
 void
 GameManagerForm::dragEnterEvent(QDragEnterEvent *event)
@@ -369,22 +485,19 @@ GameManagerForm::dragEnterEvent(QDragEnterEvent *event)
         if (!isValidBatch) break;
     }
 
-   if ( isValidBatch )
+
+   if ( isValidBatch ){
+       ui->GameCardGrid->setGraphicsEffect(new QGraphicsBlurEffect);
        event->acceptProposedAction();
+   }
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
+void GameManagerForm::on_GameTopButton_2_clicked()
+{
+    this->createItemDialog(nullptr);
+}
 
 
 

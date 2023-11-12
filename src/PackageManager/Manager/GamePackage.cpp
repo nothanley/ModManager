@@ -5,11 +5,6 @@
 using namespace ConfigUtils;
 
 
-std::string
-CGamePackage::getAssetPath(){
-    return this->m_AssetPath;
-}
-
 void 
 CGamePackage::setAssetPath(const std::string& assetPath) {
     this->m_AssetPath = unifySlashEncoding(assetPath);
@@ -88,11 +83,11 @@ CGamePackage::saveJson(){
 
 bool
 CGamePackage::moveContentsToRoot(const std::string& dir){
-    std::string newAssetPath = (dir+"\\") + extractFileName(getPath());
+    std::string newAssetPath = (dir+"/") + extractFileName(getPath());
 
     if (this->hasThumbnail())
     {   /* Copy thumbnail if exists */
-        std::string thumbnailPath = (dir+"\\") +"thumbnail.jpg";
+        std::string thumbnailPath = (dir+"/") +"thumbnail.jpg";
         if (!ConfigUtils::copyFile(getThumbnailPath(),thumbnailPath))
             return false;
         this->setThumbnailPath(thumbnailPath);  }
@@ -136,7 +131,7 @@ CGamePackage::hasThumbnail() {
     return !(m_ThumbnailPath == "");
 }
 
-std::string 
+std::string
 CGamePackage::getPath() {
     return this->m_AssetPath;
 }
@@ -215,6 +210,12 @@ CGamePackage::getFileVersion() {
     return this->m_FileVersion;
 }
 
+void
+CGamePackage::deleteContents(){
+    std::string pathFolder = extractFolderPath(this->getPath());
+    ConfigUtils::removeDirectory(pathFolder);
+}
+
 void 
 CGamePackage::CollectJsonValues() {
 
@@ -232,3 +233,9 @@ CGamePackage::CollectJsonValues() {
     this->m_AuthorLink = m_ProfileJson["author_link"];
     this->m_ThumbnailPath = m_ProfileJson["thumbnail_path"];
 }
+
+
+
+
+
+

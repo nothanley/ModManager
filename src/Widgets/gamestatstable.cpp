@@ -9,7 +9,7 @@ GameStatsTable::GameStatsTable(QWidget *parent) :
     ui(new Ui::GameStatsTable)
 {
     ui->setupUi(this);
-    this->setAttribute(Qt::WA_DeleteOnClose);
+    this->setAttribute(Qt::WA_DeleteOnClose,true);
 }
 
 GameStatsTable::~GameStatsTable()
@@ -46,8 +46,36 @@ void PopulateLeftTable(QTableWidget* table,CGamePackage* selectedMod){
     table->setItem( 4,0,new QTableWidgetItem( selectedMod->getPath().c_str() ) );
 }
 
+void
+GameStatsTable::addEnableButtonToCell(QTableWidget* table, int row, int column){
+    QPushButton* button = new QPushButton();
+    button->setText("Enable");
+    table->setCellWidget(row,column,button);
+    QObject::connect(button, &QPushButton::clicked,
+                     this, &GameStatsTable::toggleItem );
+}
 
-void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
+void
+GameStatsTable::addExtractButtonToCell(QTableWidget* table, int row, int column){
+    QPushButton* button = new QPushButton();
+    button->setText("Extract Contents");
+    table->setCellWidget(row,column,button);
+    QObject::connect(button, &QPushButton::clicked,
+                     this, &GameStatsTable::saveItemLocally );
+}
+
+
+void
+GameStatsTable::addEditButtonToCell(QTableWidget* table, int row, int column){
+    QPushButton* button = new QPushButton();
+    button->setText("Edit Details");
+    table->setCellWidget(row,column,button);
+    QObject::connect(button, &QPushButton::clicked,
+                     this, &GameStatsTable::editTableItem );
+}
+
+void
+GameStatsTable::PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
 
     QStringList headerLabels = { "Mod Version", "File MD5/SHA", "Set Enabled", "Extract Contents", "Edit Details" };
     table->setRowCount( headerLabels.size() );
@@ -58,20 +86,9 @@ void PopulatePropertyTable(QTableWidget* table,CGamePackage* selectedMod){
     table->setItem( 0,0,new QTableWidgetItem( QString::number( selectedMod->getFileVersion())) );
     table->setItem( 1,0,new QTableWidgetItem( QString::number( selectedMod->getMD5())) );
 
-    // Enable Button
-    QPushButton* enableButton = new QPushButton();
-    enableButton->setText("Enable");
-    table->setCellWidget(2,0,enableButton);
-
-    // Extract Button
-    QPushButton* extractButton = new QPushButton();
-    extractButton->setText("Extract Contents");
-    table->setCellWidget(3,0,extractButton);
-
-    // Edit Button
-    QPushButton* editButton = new QPushButton();
-    editButton->setText("Edit Details");
-    table->setCellWidget(4,0,editButton);
+    addEnableButtonToCell (table, 2, 0);
+    addExtractButtonToCell(table, 3, 0);
+    addExtractButtonToCell(table, 4, 0);
 }
 
 void
@@ -81,17 +98,33 @@ GameStatsTable::UpdateStatsTable(CGamePackage* selectedMod){
     PopulateLeftTable(ui->leftTable,selectedMod);
     PopulateRightTable(ui->rightTable,selectedMod);
     PopulatePropertyTable(ui->PropertyTable,selectedMod);
+    this->pGameMod = selectedMod;
 }
 
+QString
+GameStatsTable::getCurrentTableItem(){
+    if (pGameMod == nullptr)
+        return "";
+    return QString::fromStdString(pGameMod->getName());
+}
 
+void
+GameStatsTable::editTableItem(){
+    emit editItem(pGameMod);
+}
 
+void
+GameStatsTable::saveItemLocally()
+{
+    qDebug() << "Placeholder zip save.";
+}
 
-
-
-
-
-
-
+void
+GameStatsTable::toggleItem()
+{
+    pGameMod->setEnabled( !pGameMod->getStatus() );
+    qDebug() << "Mod Status: " << pGameMod->getStatus();
+}
 
 
 

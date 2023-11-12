@@ -6,12 +6,25 @@
 #include <QDebug>
 #include "src/qtgameutils.hpp"
 
-AddItemDialog::AddItemDialog(QWidget *parent) :
+AddItemDialog::AddItemDialog(QWidget *parent, CGamePackage* itemTemplate) :
     QWidget(parent),
     ui(new Ui::AddItemDialog)
 {
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose);
+    ui->previewImage->setIconSize(ui->previewImage->size());
+
+    if (itemTemplate != nullptr){
+        ui->titleBox->setText( itemTemplate->getName().c_str() );
+        ui->authorBox->setText( itemTemplate->getAuthor().c_str() );
+        ui->pathBox->setText( itemTemplate->getPath().c_str() );
+        ui->thumbnailBox->setText( itemTemplate->getThumbnailPath().c_str() );
+        ui->descBox->setText( itemTemplate->getDescription().c_str()  );
+        ui->replaceBox->setText( itemTemplate->getReplaceAssetName().c_str()  );
+        ui->versionBox->setText( QString::number(itemTemplate->getFileVersion()) );
+        ui->siteLinkBox->setText( itemTemplate->getLink().c_str()  );
+    }
+
 }
 
 AddItemDialog::~AddItemDialog()
@@ -82,6 +95,7 @@ void AddItemDialog::on_addModButton_clicked()
 
     /* Send item to layout and closes interface */
     emit this->sendItem(gameItem);
+    this->close();
 }
 
 
@@ -100,8 +114,9 @@ AddItemDialog::on_thumbnailBox_textChanged(const QString &arg1)
         thumbnailPath.endsWith(".jpeg") ) {
 
         QPixmap thumbnailMap = QPixmap::fromImage(QImage(thumbnailPath));
-        thumbnailMap = thumbnailMap.scaled(ui->ThumbnailLabel->size(),Qt::KeepAspectRatio);
-        ui->ThumbnailLabel->setPixmap( thumbnailMap );  }
+        thumbnailMap = thumbnailMap.scaled(ui->previewImage->size(),Qt::KeepAspectRatio);
+        ui->previewImage->setIcon( thumbnailMap );
+        ui->previewImage->setIconSize(thumbnailMap.size());}
 }
 
 
@@ -140,12 +155,11 @@ AddItemDialog::hasValidInput(){
 }
 
 
-
-
-
-
-
-
+void
+AddItemDialog::on_previewImage_clicked()
+{
+    ui->thumbnailBrowseButton->click();
+}
 
 
 

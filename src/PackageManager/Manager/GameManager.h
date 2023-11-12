@@ -26,6 +26,12 @@ public:
     unsigned int getProfileCount();
     bool hasActiveProfile();
 
+    /**
+     * @brief Gets a vector of all profile objects within the manager
+     * @return std::vector of all stored CGameProfile objects
+     */
+    std::vector<CGameProfile> getProfiles();
+
 protected:
     std::string m_gameTitle;
     std::string m_JsonPath;

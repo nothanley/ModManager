@@ -2,7 +2,6 @@
 #pragma once
 using namespace ConfigUtils;
 
-
 class CGamePackage {
 
 public:
@@ -10,7 +9,7 @@ public:
     CGamePackage( const char* name, const char* type, const char* assetPath ){
         setAssetPath(assetPath);
         setName(name);
-        setAuthorName("N/A");
+        setAuthorName("Unknown Author");
         addCreationDate();
         setType(type);
         setDescription("No Description.");
@@ -21,6 +20,7 @@ public:
 
         try { CollectJsonValues();}
         catch (...) {
+            std::cerr << "Failed to read json";
             throw std::runtime_error("Invalid JSON."); }
     }
 
@@ -44,16 +44,16 @@ public:
     std::string getAuthor();
     std::string getReplaceAssetName();
     std::string getPath();
+    std::string getThumbnailPath();
+    std::string getJsonPath();
     std::string getName();
     std::string getType();
     std::string getDescription();
     std::string getDate();
     std::string getLink();
-    std::string getThumbnailPath();
-    std::string getJsonPath();
     std::string getAssetFileName();
-    std::string getAssetPath();
     bool saveTo(const std::string& path);
+    void deleteContents();
 
 protected:
     std::string m_JsonPath;

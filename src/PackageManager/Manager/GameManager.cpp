@@ -12,7 +12,7 @@ CGameManager::CGameManager(const char* path) {
 
     try { CollectJsonValues(); }
     catch (...) {
-        throw std::runtime_error("Invalid Manager Configuration.");
+        throw std::runtime_error("\nInvalid Manager Configuration.");
     }
 }
 
@@ -106,6 +106,19 @@ CGameManager::createProfile(const char* name, bool setActive) {
         this->m_activeProfile = profile;
     }
 }
+
+std::vector<CGameProfile>
+CGameManager::getProfiles(){
+    std::vector<CGameProfile> profiles;
+
+    for (const auto& profile:this->m_GameProfiles)
+    {
+        profiles.push_back(*profile);
+    }
+
+    return profiles;
+}
+
 
 void 
 CGameManager::replaceProfile(CGameProfile* profile, const std::string& target) {
@@ -202,20 +215,17 @@ void
 CGameManager::initModRegistry(CGameProfile* profile) {
     std::string profileName = profile->getName();
     std::vector<std::string> modRegistry = m_ManagerJson[profileName]["mod_registry"];
-    profile->setModCount(modRegistry.size());
 
     for (const auto& modName : modRegistry) {
         std::string modJsonPath = m_ManagerJson[profileName][modName]["path"];
-
         try {
             /* Initializes mod item with specified JSON path */
             CGamePackage* mod = new CGamePackage(modJsonPath.c_str());
-            int loadIndex = m_ManagerJson[profileName][modName]["load_index"];
             mod->setEnabled(m_ManagerJson[profileName][modName]["status"]);
-            profile->addToRegistry(mod, loadIndex);
+            profile->addToRegistry(mod);
         }
         catch (...) {
-            printf("Failed to load mod configuration: %s", modJsonPath.c_str());
+            std::cerr << "\nFailed to load mod configuration: " << modJsonPath + "\n";
         }
     }
 }

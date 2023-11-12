@@ -15,7 +15,7 @@ class AddItemDialog : public QWidget
     Q_OBJECT
 
 public:
-    explicit AddItemDialog(QWidget *parent = nullptr);
+    explicit AddItemDialog(QWidget *parent = nullptr, CGamePackage* itemTemplate = nullptr);
     ~AddItemDialog();
 
 Q_SIGNALS:
@@ -31,6 +31,8 @@ private slots:
     void on_thumbnailBox_textChanged(const QString &arg1);
     void on_addModButton_clicked();
     void on_cancelButton_clicked();
+
+    void on_previewImage_clicked();
 
 private:
     bool hasValidInput();

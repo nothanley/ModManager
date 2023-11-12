@@ -24,23 +24,28 @@ public:
                       GameManagerForm* parentForm=nullptr);
     ~GameCard();
 
+    void focus();
     void decorate();
     bool isEmptyCard();
     bool isTextEnabled(){ return this->m_bShowText; }
     bool isUserHovering(){ return this->m_IsUserHovering; }
     void setTextVisible(bool toggle){ this->m_bShowText =toggle;}
     void setHoverDecoration();
+    QString getItemName();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool event(QEvent * e) override;
-    void createAddItemDialog();
 
 private slots:
-    void on_GameCardButton_clicked();
-    void addDialogClosed();
-
     void on_GameCardButton_released();
+    void on_GameCardButton_customContextMenuRequested(const QPoint &pos);
+
+    void replaceMod();
+    void editModDetails();
+    void addProfileMod();
+    void sendRemoveModToUI();
+    void saveToZip();
 
 Q_SIGNALS:
     void TableUpdate(CGamePackage* gameMod);
@@ -51,10 +56,6 @@ private:
     constexpr static double OVERLAY_WEIGHT = .2;
     QSvgRenderer m_SvgBorderMsk = QSvgRenderer(QString(":/icons/card_mask.svg"));
     QSvgRenderer m_SvgOutlineMsk = QSvgRenderer(QString(":/icons/card_overlay_outline.svg"));
-
-    /* Debug Constants */
-    constexpr static bool DEBUG_CARDS = false;
-    const QString DBG_TEMPLATE_DIR = "C:/Users/wauke/source/repos/ModManager/src/Widgets/icons/card_templates";
 
     void mousePress(QEvent* event);
     void hoverEnter(QHoverEvent * event);
@@ -79,7 +80,6 @@ private:
 
     GameManagerForm* pParentForm = nullptr;
     CGamePackage* pGameMod = nullptr;
-    AddItemDialog* pItemDialog = nullptr;
     Ui::GameCard *ui;
 };
 

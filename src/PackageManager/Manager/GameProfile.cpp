@@ -40,6 +40,19 @@ CGameProfile::getModCount() {
     return this->m_PackageLoadOrder.size();
 }
 
+void
+CGameProfile::setRegistry(const std::vector<CGamePackage*> registry){
+    this->m_PackageLoadOrder = registry;
+}
+
+CGamePackage*
+CGameProfile::getMod(const std::string& name){
+    int index = this->getIndex(name);
+    if (index == -1) return nullptr;
+
+    return m_PackageLoadOrder[index];
+}
+
 int 
 CGameProfile::getIndex(const std::string& name) {
     for (int i = 0; i < this->getModCount(); i++) {
@@ -53,7 +66,6 @@ CGameProfile::getIndex(const std::string& name) {
 
 void 
 CGameProfile::saveToJson(JSON* json) {
-    // todo: add more properties
     *json = saveModRegistryToJson(*json);
 }
 
@@ -102,3 +114,34 @@ CGameProfile::moveItem(int oldIndex, int newIndex) {
     /* Erase old value from load list */
     m_PackageLoadOrder.erase(m_PackageLoadOrder.begin() + oldIndex);
 }
+
+void
+CGameProfile::removeFromRegistry(int index){
+    CGamePackage* sourceItem = m_PackageLoadOrder.at(index);
+    /* todo: check for other dependencies before deleting contents */
+    sourceItem->deleteContents();
+    delete sourceItem;
+    this->m_PackageLoadOrder.erase(m_PackageLoadOrder.begin() + index);
+}
+
+void
+CGameProfile::removeFromRegistry(CGamePackage* mod){
+    int index = getIndex(mod->getName());
+    if (index == -1){
+        std::cerr << "\nRequested mod deletion doesn't exist in registry.";
+        return; }
+
+    removeFromRegistry(index);
+}
+
+
+
+
+
+
+
+
+
+
+
+

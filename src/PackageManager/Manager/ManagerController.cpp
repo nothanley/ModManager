@@ -2,7 +2,6 @@
 #pragma once
 using namespace ConfigUtils;
 
-
 CManagerController::CManagerController(const char* path) {
     this->m_RootPath = path;
     if (!DebugUtils::DirectoryExists(this->m_RootPath)) { return; }
@@ -67,7 +66,7 @@ CManagerController::InitializeManagers() {
             CGameManager* gameManager = new CGameManager(path.c_str());
             this->pGameManagers.push_back(gameManager);
         }
-        catch (...) { std::cout << "invalid json"; }
+        catch (...) { std::cerr << "\nInvalid json"; }
     }
 
 }

@@ -18,10 +18,14 @@ public:
     void saveToJson(JSON* json);
     void addToRegistry(CGamePackage* contents, int index);
     void addToRegistry(CGamePackage* contents);
+    void removeFromRegistry(int index);
+    void removeFromRegistry(CGamePackage* mod);
     unsigned int getModCount();
     int getIndex(const std::string& name);
+    CGamePackage* getMod(const std::string& name);
     std::vector<CGamePackage*> getAllMods();
     std::string getName();
+    void setRegistry(const std::vector<CGamePackage*> registry);
 
 protected:
     std::vector<CGamePackage*> m_PackageLoadOrder = {};
@@ -29,7 +33,6 @@ protected:
 
 private:
     std::string m_ProfileName;
-    std::vector<std::string> m_ModPaths;
 
     JSON saveModRegistryToJson(JSON json);
     std::vector<std::string> getAllModNames();
