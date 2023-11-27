@@ -26,6 +26,7 @@
   <property name="styleSheet">
    <string notr="true">QMainWindow{ 
 	border-image: url(&quot;:/icons/placeholder_background.png&quot;) 0 0 0 0 stretch stretch;
+	border: 1px solid red;
 }
 
 QLabel{
@@ -157,7 +158,6 @@ border: 0px solid grey;
          <property name="font">
           <font>
            <family>Segoe UI Variable Display Semib</family>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -384,7 +384,6 @@ QLabel{
                 <font>
                  <family>Segoe UI Semibold</family>
                  <pointsize>8</pointsize>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -502,7 +501,7 @@ QLabel{
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="Widgets/BurgerMenu/burgermenu.qrc">
+                <iconset resource="Widgets/burgermenu.qrc">
                  <normaloff>:/icons/icon_github.png</normaloff>:/icons/icon_github.png</iconset>
                </property>
                <property name="iconSize">
@@ -539,7 +538,7 @@ QLabel{
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="Widgets/BurgerMenu/burgermenu.qrc">
+                <iconset resource="Widgets/burgermenu.qrc">
                  <normaloff>:/icons/icon_kofi.png</normaloff>:/icons/icon_kofi.png</iconset>
                </property>
                <property name="iconSize">
@@ -584,7 +583,6 @@ QLabel{
              <font>
               <family>Nirmala UI</family>
               <pointsize>7</pointsize>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -746,7 +744,7 @@ QPushButton::hover{
   </widget>
  </widget>
  <resources>
-  <include location="Widgets/BurgerMenu/burgermenu.qrc"/>
+  <include location="Widgets/burgermenu.qrc"/>
   <include location="WindowHandler/WindowHandler.qrc"/>
  </resources>
  <connections/>
